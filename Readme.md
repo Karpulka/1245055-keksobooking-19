@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алёна Карпова](https://up.htmlacademy.ru/javascript/19/user/1245055).
-* Наставник: `Неизвестно`.
+* Наставник: [Вадим Решетников](https://htmlacademy.ru/profile/id157287).
 
 ---
 
