@@ -11,6 +11,9 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
 
+var map = document.querySelector('.map');
+var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
 function LocationCoordinates(x, y, offset) {
   if (!offset) {
     offset = 0;
@@ -66,4 +69,17 @@ var getAdverts = function (count) {
   return adverts;
 };
 
-console.log(getAdverts(ADVERT_ARRAY_LENGTH));
+var renderMapPin = function (adverts) {
+  var advertElement = mapPinTemplate.cloneNode(true);
+  adverts.forEach(function (advert) {
+    advertElement.style.left = advert.offer.location.x;
+    advertElement.style.left = advert.offer.location.y;
+    advertElement.querySelector('img').src = advert.author.avatar;
+    advertElement.querySelector('img').alt = advert.offer.title;
+  });
+  return advertElement;
+};
+
+var adverts = getAdverts(ADVERT_ARRAY_LENGTH);
+map.classList.toggle('map--faded');
+
