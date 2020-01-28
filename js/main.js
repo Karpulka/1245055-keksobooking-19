@@ -13,6 +13,7 @@ var PHOTOS = [
 
 var map = document.querySelector('.map');
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var mapPinsList = document.querySelector('.map__pins');
 
 function LocationCoordinates(x, y, offset) {
   if (!offset) {
@@ -39,7 +40,9 @@ var getAdverts = function (count) {
   var adverts = [];
   for (var i = 1; i < count + 1; i++) {
     var room = getRandomValue(1, 5);
-    var location = new LocationCoordinates(600, 350, i);
+    var location = new LocationCoordinates(600, 350);
+    var offsetX = getRandomValue(-400, 400);
+    var offsetY = getRandomValue(-200, 200);
     var featuresLength = getRandomValue(0, FEATURES.length - 1);
     var photosStartDelete = getRandomValue(0, PHOTOS.length - 1);
     var obj = {
@@ -59,8 +62,8 @@ var getAdverts = function (count) {
         description: 'А здесь мы пишем описание квартирки №' + i,
         photos: PHOTOS.slice().splice(photosStartDelete),
         location: {
-          x: location.x,
-          y: location.y
+          x: location.x + offsetX,
+          y: location.y + offsetY
         }
       }
     };
@@ -69,17 +72,24 @@ var getAdverts = function (count) {
   return adverts;
 };
 
-var renderMapPin = function (adverts) {
+var renderMapPin = function (advert) {
   var advertElement = mapPinTemplate.cloneNode(true);
-  adverts.forEach(function (advert) {
-    advertElement.style.left = advert.offer.location.x;
-    advertElement.style.left = advert.offer.location.y;
-    advertElement.querySelector('img').src = advert.author.avatar;
-    advertElement.querySelector('img').alt = advert.offer.title;
-  });
+  var pin = advertElement.querySelector('img');
+  var pinWidth = pin.style.width;
+  var pinHeight = pin.style.height;
+  var locationX = advert.offer.location.x + Math.ceil(pinWidth / 2);
+  var locationY = advert.offer.location.y + Math.ceil(pinHeight / 2);
+  advertElement.style.left = locationX + 'px';
+  advertElement.style.top = locationY + 'px';
+  pin.src = advert.author.avatar;
+  pin.alt = advert.offer.title;
   return advertElement;
 };
 
 var adverts = getAdverts(ADVERT_ARRAY_LENGTH);
 map.classList.toggle('map--faded');
-
+var fragment = document.createDocumentFragment();
+adverts.forEach(function (advert) {
+  fragment.appendChild(renderMapPin(advert));
+});
+mapPinsList.appendChild(fragment);
