@@ -37,8 +37,8 @@ var getAdverts = function (count) {
   for (var i = 1; i < count + 1; i++) {
     var room = getRandomValue(1, 5);
     var location = new LocationCoordinates(600, 350, i);
-    var featuresLength = getRandomValue(1, FEATURES.length);
-    var photosLength = getRandomValue(1, PHOTOS.length);
+    var featuresLength = getRandomValue(0, FEATURES.length - 1);
+    var photosStartDelete = getRandomValue(0, PHOTOS.length - 1);
     var obj = {
       author: {
         avatar: 'img/avatars/user0' + i + '.png'
@@ -52,9 +52,9 @@ var getAdverts = function (count) {
         guests: room * GUESTS_IN_ROOM,
         checkin: getRandomItemFromArray(CHECK_TIMES),
         checkout: getRandomItemFromArray(CHECK_TIMES),
-        features: FEATURES.splice(featuresLength),
+        features: FEATURES.slice().splice(featuresLength),
         description: 'А здесь мы пишем описание квартирки №' + i,
-        photos: PHOTOS.splice(photosLength),
+        photos: PHOTOS.slice().splice(photosStartDelete),
         location: {
           x: location.x,
           y: location.y
