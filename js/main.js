@@ -25,8 +25,6 @@ function LocationCoordinates(x, y, offset) {
 }
 
 var getRandomValue = function (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -36,37 +34,42 @@ var getRandomItemFromArray = function (array) {
   return array[Math.floor(Math.random() * (max - min)) + min];
 };
 
+var makeAdvert = function (idx) {
+  var roomsCount = getRandomValue(1, 5);
+  var location = new LocationCoordinates(600, 350);
+  var offsetX = getRandomValue(-400, 400);
+  var offsetY = getRandomValue(-200, 200);
+  var featuresLength = getRandomValue(0, FEATURES.length - 1);
+  var photosStartDelete = getRandomValue(0, PHOTOS.length - 1);
+  var obj = {
+    author: {
+      avatar: 'img/avatars/user0' + idx + '.png'
+    },
+    offer: {
+      title: 'Апартаменты ' + idx,
+      address: location.x + ', ' + location.y,
+      price: getRandomValue(10000, 35000),
+      type: getRandomItemFromArray(TYPES),
+      rooms: roomsCount,
+      guests: roomsCount * GUESTS_IN_ROOM,
+      checkin: getRandomItemFromArray(CHECK_TIMES),
+      checkout: getRandomItemFromArray(CHECK_TIMES),
+      features: FEATURES.slice().splice(featuresLength),
+      description: 'А здесь мы пишем описание квартирки №' + idx,
+      photos: PHOTOS.slice().splice(photosStartDelete),
+      location: {
+        x: location.x + offsetX,
+        y: location.y + offsetY
+      }
+    }
+  };
+  return obj;
+};
+
 var getAdverts = function (count) {
   var adverts = [];
   for (var i = 1; i < count + 1; i++) {
-    var room = getRandomValue(1, 5);
-    var location = new LocationCoordinates(600, 350);
-    var offsetX = getRandomValue(-400, 400);
-    var offsetY = getRandomValue(-200, 200);
-    var featuresLength = getRandomValue(0, FEATURES.length - 1);
-    var photosStartDelete = getRandomValue(0, PHOTOS.length - 1);
-    var obj = {
-      author: {
-        avatar: 'img/avatars/user0' + i + '.png'
-      },
-      offer: {
-        title: 'Апартаменты ' + i,
-        address: location.x + ', ' + location.y,
-        price: getRandomValue(10000, 35000),
-        type: getRandomItemFromArray(TYPES),
-        rooms: room,
-        guests: room * GUESTS_IN_ROOM,
-        checkin: getRandomItemFromArray(CHECK_TIMES),
-        checkout: getRandomItemFromArray(CHECK_TIMES),
-        features: FEATURES.slice().splice(featuresLength),
-        description: 'А здесь мы пишем описание квартирки №' + i,
-        photos: PHOTOS.slice().splice(photosStartDelete),
-        location: {
-          x: location.x + offsetX,
-          y: location.y + offsetY
-        }
-      }
-    };
+    var obj = makeAdvert(i);
     adverts.push(obj);
   }
   return adverts;
