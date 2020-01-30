@@ -2,6 +2,12 @@
 
 var ADVERT_ARRAY_LENGTH = 8;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
+var TYPES_TITLE = {
+  palace: 'Дворец',
+  flat: 'Квартира',
+  house: 'Дом',
+  bungalo: 'Бунгало'
+};
 var GUESTS_IN_ROOM = 2;
 var CHECK_TIMES = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -14,6 +20,7 @@ var PHOTOS = [
 var map = document.querySelector('.map');
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPinsList = document.querySelector('.map__pins');
+var mapCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 function LocationCoordinates(x, y, offset) {
   if (!offset) {
@@ -87,6 +94,78 @@ var renderMapPin = function (advert) {
   return advertElement;
 };
 
+var showListItemsByClass = function (listItems, itemClassStart, classIndicators) {
+  listItems.forEach(function (listItem) {
+    listItem.style.display = 'none';
+  });
+  classIndicators.forEach(function (item) {
+    listItems.forEach(function (listItem) {
+      if (listItem.classList.contains(itemClassStart + item)) {
+        listItem.style.display = 'inline-block';
+      }
+    });
+  });
+};
+
+var renderCardPhotos = function (cardElement, cardPhotos, cardPhotosParentBlock) {
+  if (cardPhotos.length > 0) {
+    cardPhotos.forEach(function (photo, i) {
+      if (i === 0) {
+        cardElement.querySelector('.popup__photo').src = photo;
+      } else {
+        var cardPhotoElement = cardElement.querySelector('.popup__photo').cloneNode();
+        cardPhotoElement.src = photo;
+        cardPhotosParentBlock.appendChild(cardPhotoElement);
+      }
+    });
+  } else {
+    cardElement.querySelector('.popup__photo').style.display = 'none';
+  }
+};
+
+var getTimeCheckInOut = function (checkIn, checkOut) {
+  var timeCheckInOut = '';
+  if (checkIn && checkOut) {
+    timeCheckInOut = 'Заезд после ' + checkIn + ', выезд до ' + checkOut;
+  } else if (checkIn) {
+    timeCheckInOut = 'Заезд после ' + checkIn;
+  } else if (checkOut) {
+    timeCheckInOut = 'Выезд до ' + checkOut;
+  }
+  return timeCheckInOut;
+};
+
+var getCapacity = function (roomsCount, guestsCount) {
+  var capacity = '';
+  if (roomsCount && guestsCount) {
+    capacity = roomsCount + ' комнаты для ' + guestsCount + ' гостей';
+  } else if (roomsCount) {
+    capacity = roomsCount + ' комнаты';
+  } else if (guestsCount) {
+    capacity = 'Для ' + guestsCount + ' гостей';
+  }
+  return capacity;
+};
+
+var renderMapCard = function (advert) {
+  var cardElement = mapCardTemplate.cloneNode(true);
+  var photosBlock = cardElement.querySelector('.popup__photos');
+  cardElement.querySelector('.popup__title').textContent = advert.offer.title || '';
+  cardElement.querySelector('.popup__text--address').textContent = advert.offer.address || '';
+  cardElement.querySelector('.popup__text--price').textContent = advert.offer.price ? advert.offer.price + '₽/ночь' : '';
+  cardElement.querySelector('.popup__type').textContent = TYPES_TITLE[advert.offer.type] || '';
+  cardElement.querySelector('.popup__text--capacity').textContent = getCapacity(advert.offer.rooms, advert.offer.guests);
+  cardElement.querySelector('.popup__text--time').textContent = getTimeCheckInOut(advert.offer.checkin, advert.offer.checkout);
+  var features = cardElement.querySelectorAll('.popup__features > .popup__feature');
+  showListItemsByClass(features, 'popup__feature--', advert.offer.features);
+  cardElement.querySelector('.popup__description').textContent = advert.offer.description || '';
+  renderCardPhotos(cardElement, advert.offer.photos, photosBlock);
+  if (advert.author.avatar) {
+    cardElement.querySelector('.popup__avatar').src = advert.author.avatar;
+  }
+  return cardElement;
+};
+
 var adverts = getAdverts(ADVERT_ARRAY_LENGTH);
 map.classList.toggle('map--faded');
 var fragment = document.createDocumentFragment();
@@ -94,3 +173,4 @@ adverts.forEach(function (advert) {
   fragment.appendChild(renderMapPin(advert));
 });
 mapPinsList.appendChild(fragment);
+map.insertBefore(renderMapCard(adverts[0]), map.querySelector('.map__filters-container'));
