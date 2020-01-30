@@ -119,7 +119,7 @@ var renderCardPhotos = function (cardElement, cardPhotos, cardPhotosParentBlock)
       }
     });
   } else {
-    cardElement.querySelector('.popup__photo').style.display = 'none';
+    cardElement.querySelector('.popup__photo').remove();
   }
 };
 
@@ -147,22 +147,29 @@ var getCapacity = function (roomsCount, guestsCount) {
   return capacity;
 };
 
+var renderCardElement = function (cardElement, selector, attribute, value) {
+  if (value) {
+    cardElement.querySelector(selector)[attribute] = value;
+  } else {
+    cardElement.querySelector(selector).remove();
+  }
+};
+
 var renderMapCard = function (advert) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var photosBlock = cardElement.querySelector('.popup__photos');
-  cardElement.querySelector('.popup__title').textContent = advert.offer.title || '';
-  cardElement.querySelector('.popup__text--address').textContent = advert.offer.address || '';
-  cardElement.querySelector('.popup__text--price').textContent = advert.offer.price ? advert.offer.price + '₽/ночь' : '';
-  cardElement.querySelector('.popup__type').textContent = TYPES_TITLE[advert.offer.type] || '';
-  cardElement.querySelector('.popup__text--capacity').textContent = getCapacity(advert.offer.rooms, advert.offer.guests);
-  cardElement.querySelector('.popup__text--time').textContent = getTimeCheckInOut(advert.offer.checkin, advert.offer.checkout);
+  renderCardElement(cardElement, '.popup__title', 'textContent', advert.offer.title);
+  renderCardElement(cardElement, '.popup__text--address', 'textContent', advert.offer.address);
+  var price = advert.offer.price ? advert.offer.price + '₽/ночь' : '';
+  renderCardElement(cardElement, '.popup__text--price', 'textContent', price);
+  renderCardElement(cardElement, '.popup__type', 'textContent', TYPES_TITLE[advert.offer.type]);
+  renderCardElement(cardElement, '.popup__text--capacity', 'textContent', getCapacity(advert.offer.rooms, advert.offer.guests));
+  renderCardElement(cardElement, '.popup__text--time', 'textContent', getTimeCheckInOut(advert.offer.checkin, advert.offer.checkout));
   var features = cardElement.querySelectorAll('.popup__features > .popup__feature');
   showListItemsByClass(features, 'popup__feature--', advert.offer.features);
-  cardElement.querySelector('.popup__description').textContent = advert.offer.description || '';
+  renderCardElement(cardElement, '.popup__description', 'textContent', advert.offer.description);
   renderCardPhotos(cardElement, advert.offer.photos, photosBlock);
-  if (advert.author.avatar) {
-    cardElement.querySelector('.popup__avatar').src = advert.author.avatar;
-  }
+  renderCardElement(cardElement, '.popup__avatar', 'src', advert.author.avatar);
   return cardElement;
 };
 
