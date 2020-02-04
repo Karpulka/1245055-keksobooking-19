@@ -102,16 +102,12 @@ var renderMapPin = function (advert) {
   return advertElement;
 };
 
-var showListItemsByClass = function (listItems, itemClassStart, classIndicators) {
+var showListItemsByClass = function (listItems, classIndicators) {
   listItems.forEach(function (listItem) {
-    listItem.style.display = 'none';
-  });
-  classIndicators.forEach(function (item) {
-    listItems.forEach(function (listItem) {
-      if (listItem.classList.contains(itemClassStart + item)) {
-        listItem.style.display = 'inline-block';
-      }
-    });
+    var featureName = listItem.classList[1].split('--')[1];
+    if (classIndicators.indexOf(featureName) === -1) {
+      listItem.style.display = 'none';
+    }
   });
 };
 
@@ -196,7 +192,7 @@ var renderMapCard = function (advert) {
     'text--time': getInfoString(time, stringTemplates.time.delimeter),
     'description': offer.description
   });
-  showListItemsByClass(features, 'popup__feature--', offer.features);
+  showListItemsByClass(features, offer.features);
   renderCardPhotos(cardElement, offer.photos, photosBlock);
   renderElement({'avatar': advert.author.avatar}, 'src');
   return cardElement;
