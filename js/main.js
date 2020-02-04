@@ -16,6 +16,17 @@ var PHOTOS = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
 ];
+var stringTemplates = {
+  capacity: {
+    rooms: '#value# комнаты',
+    guests: 'Для #value# гостей'
+  },
+  time: {
+    checkin: 'Заезд после #value#',
+    checkout: 'Выезд до #value#',
+    delimeter: ', '
+  }
+};
 
 var map = document.querySelector('.map');
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -117,28 +128,21 @@ var renderCardPhotos = function (cardElement, cardPhotos, cardPhotosParentBlock)
   return true;
 };
 
-var getTimeCheckInOut = function (checkIn, checkOut) {
-  var timeCheckInOut = '';
-  if (checkIn && checkOut) {
-    timeCheckInOut = 'Заезд после ' + checkIn + ', выезд до ' + checkOut;
-  } else if (checkIn) {
-    timeCheckInOut = 'Заезд после ' + checkIn;
-  } else if (checkOut) {
-    timeCheckInOut = 'Выезд до ' + checkOut;
+var getInfoString = function (parameters, delimeter, templateParameter) {
+  templateParameter = templateParameter ? templateParameter : '#value#';
+  delimeter = delimeter ? delimeter : ' ';
+  var result = '';
+  if (parameters.length > 0) {
+    result = result + parameters[0].template.replace(templateParameter, parameters[0].value);
+    parameters.slice(1).forEach(function (item) {
+      result = delimeter ? result + delimeter : result;
+      if (item.value) {
+        var templateString = item.template.replace(templateParameter, item.value);
+        result = result + templateString[0].toLowerCase() + templateString.slice(1);
+      }
+    });
   }
-  return timeCheckInOut;
-};
-
-var getCapacity = function (roomsCount, guestsCount) {
-  var capacity = '';
-  if (roomsCount && guestsCount) {
-    capacity = roomsCount + ' комнаты для ' + guestsCount + ' гостей';
-  } else if (roomsCount) {
-    capacity = roomsCount + ' комнаты';
-  } else if (guestsCount) {
-    capacity = 'Для ' + guestsCount + ' гостей';
-  }
-  return capacity;
+  return result;
 };
 
 var renderCardElement = function (cardElement, selector, attribute, value) {
@@ -155,19 +159,40 @@ var renderCardElementCarried = function (cardElement) {
   };
 };
 
+var getInfoArguments = function (data, type) {
+  if (!data) {
+    return false;
+  }
+
+  var result = [];
+  data.forEach(function (item) {
+    var keys = Object.keys(item);
+    if (item[keys[0]]) {
+      var parameters = {
+        value: item[keys[0]],
+        template: stringTemplates[type][keys[0]]
+      };
+      result.push(parameters);
+    }
+  });
+  return result;
+};
+
 var renderMapCard = function (advert) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var photosBlock = cardElement.querySelector('.popup__photos');
   var renderElement = renderCardElementCarried(cardElement);
   var offer = advert.offer;
+  var price = offer.price ? offer.price + '₽/ночь' : '';
+  var capacity = getInfoArguments([{rooms: offer.rooms}, {guests: offer.guests}], 'capacity');
+  var time = getInfoArguments([{checkin: offer.checkin}, {checkout: offer.checkout}], 'time');
+  var features = cardElement.querySelectorAll('.popup__features > .popup__feature');
   renderElement('.popup__title', 'textContent', offer.title);
   renderElement('.popup__text--address', 'textContent', offer.address);
-  var price = offer.price ? offer.price + '₽/ночь' : '';
   renderElement('.popup__text--price', 'textContent', price);
   renderElement('.popup__type', 'textContent', TYPES_TITLE[offer.type]);
-  renderElement('.popup__text--capacity', 'textContent', getCapacity(offer.rooms, offer.guests));
-  renderElement('.popup__text--time', 'textContent', getTimeCheckInOut(offer.checkin, offer.checkout));
-  var features = cardElement.querySelectorAll('.popup__features > .popup__feature');
+  renderElement('.popup__text--capacity', 'textContent', getInfoString(capacity));
+  renderElement('.popup__text--time', 'textContent', getInfoString(time, stringTemplates.time.delimeter));
   showListItemsByClass(features, 'popup__feature--', offer.features);
   renderElement('.popup__description', 'textContent', offer.description);
   renderCardPhotos(cardElement, offer.photos, photosBlock);
