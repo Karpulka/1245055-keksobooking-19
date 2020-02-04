@@ -145,18 +145,18 @@ var getInfoString = function (parameters, delimeter, templateParameter) {
   return result;
 };
 
-var renderCardElement = function (cardElement, selector, attribute, value) {
-  if (value) {
-    cardElement.querySelector(selector)[attribute] = value;
-  } else {
-    cardElement.querySelector(selector).remove();
+var renderCardElement = function (cardElement, values, attribute, selectorPrefix) {
+  attribute = attribute ? attribute : 'textContent';
+  selectorPrefix = selectorPrefix ? selectorPrefix : '.popup__';
+  if (values) {
+    for (var code in values) {
+      if (values[code]) {
+        cardElement.querySelector(selectorPrefix + code)[attribute] = values[code];
+      } else {
+        cardElement.querySelector(selectorPrefix + code).remove();
+      }
+    }
   }
-};
-
-var renderCardElementCarried = function (cardElement) {
-  return function (selector, attribute, value) {
-    return renderCardElement(cardElement, selector, attribute, value);
-  };
 };
 
 var getInfoArguments = function (data, type) {
@@ -181,22 +181,24 @@ var getInfoArguments = function (data, type) {
 var renderMapCard = function (advert) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var photosBlock = cardElement.querySelector('.popup__photos');
-  var renderElement = renderCardElementCarried(cardElement);
+  var renderElement = renderCardElement.bind(null, cardElement);
   var offer = advert.offer;
   var price = offer.price ? offer.price + '₽/ночь' : '';
   var capacity = getInfoArguments([{rooms: offer.rooms}, {guests: offer.guests}], 'capacity');
   var time = getInfoArguments([{checkin: offer.checkin}, {checkout: offer.checkout}], 'time');
   var features = cardElement.querySelectorAll('.popup__features > .popup__feature');
-  renderElement('.popup__title', 'textContent', offer.title);
-  renderElement('.popup__text--address', 'textContent', offer.address);
-  renderElement('.popup__text--price', 'textContent', price);
-  renderElement('.popup__type', 'textContent', TYPES_TITLE[offer.type]);
-  renderElement('.popup__text--capacity', 'textContent', getInfoString(capacity));
-  renderElement('.popup__text--time', 'textContent', getInfoString(time, stringTemplates.time.delimeter));
+  renderElement({
+    'title': offer.title,
+    'text--address': offer.address,
+    'text--price': price,
+    'type': TYPES_TITLE[offer.type],
+    'text--capacity': getInfoString(capacity),
+    'text--time': getInfoString(time, stringTemplates.time.delimeter),
+    'description': offer.description
+  });
   showListItemsByClass(features, 'popup__feature--', offer.features);
-  renderElement('.popup__description', 'textContent', offer.description);
   renderCardPhotos(cardElement, offer.photos, photosBlock);
-  renderElement('.popup__avatar', 'src', advert.author.avatar);
+  renderElement({'avatar': advert.author.avatar}, 'src');
   return cardElement;
 };
 
