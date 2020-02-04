@@ -64,10 +64,7 @@ var makeAdvert = function (idx) {
       features: FEATURES.slice().splice(featuresLength),
       description: 'А здесь мы пишем описание квартирки №' + idx,
       photos: PHOTOS.slice().splice(photosStartDelete),
-      location: {
-        x: location.x + offsetX,
-        y: location.y + offsetY
-      }
+      location: new LocationCoordinates(location.x + offsetX, location.y + offsetY)
     }
   };
   return obj;
@@ -108,19 +105,16 @@ var showListItemsByClass = function (listItems, itemClassStart, classIndicators)
 };
 
 var renderCardPhotos = function (cardElement, cardPhotos, cardPhotosParentBlock) {
-  if (cardPhotos.length > 0) {
-    cardPhotos.forEach(function (photo, i) {
-      if (i === 0) {
-        cardElement.querySelector('.popup__photo').src = photo;
-      } else {
-        var cardPhotoElement = cardElement.querySelector('.popup__photo').cloneNode();
-        cardPhotoElement.src = photo;
-        cardPhotosParentBlock.appendChild(cardPhotoElement);
-      }
-    });
-  } else {
-    cardElement.querySelector('.popup__photo').remove();
+  if (!cardPhotos.length) {
+    return cardElement.querySelector('.popup__photo').remove();
   }
+  cardElement.querySelector('.popup__photo').src = cardPhotos[0];
+  cardPhotos.slice(1).forEach(function (photo) {
+    var cardPhotoElement = cardElement.querySelector('.popup__photo').cloneNode();
+    cardPhotoElement.src = photo;
+    cardPhotosParentBlock.appendChild(cardPhotoElement);
+  });
+  return true;
 };
 
 var getTimeCheckInOut = function (checkIn, checkOut) {
@@ -155,21 +149,29 @@ var renderCardElement = function (cardElement, selector, attribute, value) {
   }
 };
 
+var renderCardElementCarried = function (cardElement) {
+  return function (selector, attribute, value) {
+    return renderCardElement(cardElement, selector, attribute, value);
+  };
+};
+
 var renderMapCard = function (advert) {
   var cardElement = mapCardTemplate.cloneNode(true);
   var photosBlock = cardElement.querySelector('.popup__photos');
-  renderCardElement(cardElement, '.popup__title', 'textContent', advert.offer.title);
-  renderCardElement(cardElement, '.popup__text--address', 'textContent', advert.offer.address);
-  var price = advert.offer.price ? advert.offer.price + '₽/ночь' : '';
-  renderCardElement(cardElement, '.popup__text--price', 'textContent', price);
-  renderCardElement(cardElement, '.popup__type', 'textContent', TYPES_TITLE[advert.offer.type]);
-  renderCardElement(cardElement, '.popup__text--capacity', 'textContent', getCapacity(advert.offer.rooms, advert.offer.guests));
-  renderCardElement(cardElement, '.popup__text--time', 'textContent', getTimeCheckInOut(advert.offer.checkin, advert.offer.checkout));
+  var renderElement = renderCardElementCarried(cardElement);
+  var offer = advert.offer;
+  renderElement('.popup__title', 'textContent', offer.title);
+  renderElement('.popup__text--address', 'textContent', offer.address);
+  var price = offer.price ? offer.price + '₽/ночь' : '';
+  renderElement('.popup__text--price', 'textContent', price);
+  renderElement('.popup__type', 'textContent', TYPES_TITLE[offer.type]);
+  renderElement('.popup__text--capacity', 'textContent', getCapacity(offer.rooms, offer.guests));
+  renderElement('.popup__text--time', 'textContent', getTimeCheckInOut(offer.checkin, offer.checkout));
   var features = cardElement.querySelectorAll('.popup__features > .popup__feature');
-  showListItemsByClass(features, 'popup__feature--', advert.offer.features);
-  renderCardElement(cardElement, '.popup__description', 'textContent', advert.offer.description);
-  renderCardPhotos(cardElement, advert.offer.photos, photosBlock);
-  renderCardElement(cardElement, '.popup__avatar', 'src', advert.author.avatar);
+  showListItemsByClass(features, 'popup__feature--', offer.features);
+  renderElement('.popup__description', 'textContent', offer.description);
+  renderCardPhotos(cardElement, offer.photos, photosBlock);
+  renderElement('.popup__avatar', 'src', advert.author.avatar);
   return cardElement;
 };
 
