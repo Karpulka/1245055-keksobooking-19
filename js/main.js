@@ -1,5 +1,6 @@
 'use strict';
 
+var KEY_ENTER = 'Enter';
 var ADVERT_ARRAY_LENGTH = 8;
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var TYPES_TITLE = {
@@ -31,14 +32,19 @@ var stringTemplates = {
 var map = document.querySelector('.map');
 var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var mapPinsList = document.querySelector('.map__pins');
+var mainPin = map.querySelector('.map__pin--main')
 var mapCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var adForm = document.querySelector('.ad-form');
+var formFields = adForm.children;
+var formAddressField = adForm.querySelector('[name="address"]');
+var mapFilter = document.querySelector('.map__filters');
+var mapFilterFields = mapFilter.children;
 
-function LocationCoordinates(x, y, offset) {
-  if (!offset) {
-    offset = 0;
-  }
-  x += offset;
-  y += offset;
+function LocationCoordinates(x, y, offsetX, offsetY) {
+  offsetX = offsetX ? offsetX : 0;
+  offsetY = offsetY ? offsetY : 0;
+  x += offsetX;
+  y += offsetY;
   return {x: x, y: y};
 }
 
@@ -75,7 +81,7 @@ var makeAdvert = function (idx) {
       features: FEATURES.slice().splice(featuresLength),
       description: 'А здесь мы пишем описание квартирки №' + idx,
       photos: PHOTOS.slice().splice(photosStartDelete),
-      location: new LocationCoordinates(location.x + offsetX, location.y + offsetY)
+      location: new LocationCoordinates(location.x, location.y, offsetX, offsetY)
     }
   };
   return obj;
@@ -198,11 +204,63 @@ var renderMapCard = function (advert) {
   return cardElement;
 };
 
-var adverts = getAdverts(ADVERT_ARRAY_LENGTH);
-map.classList.toggle('map--faded');
-var fragment = document.createDocumentFragment();
-adverts.forEach(function (advert) {
-  fragment.appendChild(renderMapPin(advert));
-});
-mapPinsList.appendChild(fragment);
-map.insertBefore(renderMapCard(adverts[0]), map.querySelector('.map__filters-container'));
+// var adverts = getAdverts(ADVERT_ARRAY_LENGTH);
+//
+// var fragment = document.createDocumentFragment();
+// adverts.forEach(function (advert) {
+//   fragment.appendChild(renderMapPin(advert));
+// });
+// mapPinsList.appendChild(fragment);
+// map.insertBefore(renderMapCard(adverts[0]), map.querySelector('.map__filters-container'));
+
+var editFormsElementsActivation = function (fields) {
+  for (var k = 0; k < fields.length; k++) {
+    for (var l = 0; l < fields[k].length; l++) {
+      if (!fields[k][l].getAttribute('disabled')) {
+        fields[k][l].setAttribute('disabled', 'disabled');
+      } else {
+        fields[k][l].removeAttribute('disabled');
+      }
+    }
+  }
+};
+
+var acctivatePage = function () {
+  editFormsElementsActivation([formFields, mapFilterFields]);
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  document.removeEventListener('mouseup', mainPinMouseDownHandler);
+  document.removeEventListener('keyup', mainPinKeyDownHandler);
+};
+
+var mainPinMouseDownHandler = function (evt) {
+  if (evt.button === 0) {
+    acctivatePage();
+    setAddressFieldValue(mainPin);
+  }
+};
+
+var mainPinKeyDownHandler = function (evt) {
+  if (evt.key === KEY_ENTER) {
+    acctivatePage();
+    setAddressFieldValue(mainPin);
+  }
+};
+
+var setAddressFieldValue = function (pin, isPageNoActive) {
+  var left = parseFloat(pin.style.left.split('px')[0]);
+  var top = parseFloat(pin.style.top.split('px')[0]);
+  var height = pin.offsetHeight;
+  var width = pin.offsetWidth;
+  var afterHeight = isPageNoActive ? 0 : parseFloat(window.getComputedStyle(pin, ':after').height.split('px')[0]);
+  var offsetX = width / 2;
+  var offsetY = height / 2 + afterHeight;
+  var coordinates = new LocationCoordinates(left, top, offsetX, offsetY);
+  formAddressField.value = coordinates.x + ', ' + coordinates.y;
+};
+
+setAddressFieldValue(mainPin, true);
+editFormsElementsActivation([formFields, mapFilterFields]);
+
+mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
+mainPin.addEventListener('keydown', mainPinKeyDownHandler);
