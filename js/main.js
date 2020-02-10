@@ -236,9 +236,9 @@ var elementDisableToggle = function (element) {
 
 var setPageDisabled = function () {
   var formsElementsActivationToggle = function (list) {
-    for (var i = 0; i < list.length; i++) {
-      elementDisableToggle(list[i]);
-    }
+    [].forEach.call(list, function (element) {
+      elementDisableToggle(element);
+    });
   };
   [adFormFields, mapFilterFields].forEach(function (item) {
     formsElementsActivationToggle(item);
