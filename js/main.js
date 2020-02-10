@@ -222,19 +222,27 @@ var renderMapCard = function (advert) {
   return cardElement;
 };*/
 
-var enable = function (el) {
-  el.removeAttribute('disabled');
+var enable = function (element) {
+  element.removeAttribute('disabled');
 };
 
-var disable = function (el) {
-  el.setAttribute('disabled', 'disabled');
+var disable = function (element) {
+  element.setAttribute('disabled', 'disabled');
 };
 
-var setPageDisabled = function (disabled) {
-  var formsElementsActivationToggle = function (items) {
-    items.forEach(disabled ? disable : enable);
+var elementDisableToggle = function (element) {
+  return !element.getAttribute('disabled') ? disable(element) : enable(element);
+};
+
+var setPageDisabled = function () {
+  var formsElementsActivationToggle = function (list) {
+    for (var i = 0; i < list.length; i++) {
+      elementDisableToggle(list[i]);
+    }
   };
-  [adFormFields, mapFilterFields].forEach(formsElementsActivationToggle);
+  [adFormFields, mapFilterFields].forEach(function (item) {
+    formsElementsActivationToggle(item);
+  });
 };
 
 var activatePage = function () {
