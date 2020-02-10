@@ -222,20 +222,23 @@ var renderMapCard = function (advert) {
   return cardElement;
 };*/
 
-var editFormsElementsActivation = function (fields) {
-  for (var k = 0; k < fields.length; k++) {
-    for (var l = 0; l < fields[k].length; l++) {
-      if (!fields[k][l].getAttribute('disabled')) {
-        fields[k][l].setAttribute('disabled', 'disabled');
-      } else {
-        fields[k][l].removeAttribute('disabled');
-      }
-    }
-  }
+var enable = function (el) {
+  el.removeAttribute('disabled');
 };
 
-var acctivatePage = function () {
-  editFormsElementsActivation([adFormFields, mapFilterFields]);
+var disable = function (el) {
+  el.setAttribute('disabled', 'disabled');
+};
+
+var setPageDisabled = function (disabled) {
+  var formsElementsActivationToggle = function (items) {
+    items.forEach(disabled ? disable : enable);
+  };
+  [adFormFields, mapFilterFields].forEach(formsElementsActivationToggle);
+};
+
+var activatePage = function () {
+  setPageDisabled();
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   var adverts = getAdverts(ADVERT_ARRAY_LENGTH);
@@ -249,19 +252,21 @@ var acctivatePage = function () {
   document.removeEventListener('keyup', mainPinKeyDownHandler);
 };
 
+var activatePageElements = function () {
+  activatePage();
+  setAddressFieldValue(mainPin);
+  setValidateErrorsMessages();
+};
+
 var mainPinMouseDownHandler = function (evt) {
   if (evt.button === 0) {
-    acctivatePage();
-    setAddressFieldValue(mainPin);
-    setValidateErrorsMessages();
+    activatePageElements();
   }
 };
 
 var mainPinKeyDownHandler = function (evt) {
   if (evt.key === KEY_ENTER) {
-    acctivatePage();
-    setAddressFieldValue(mainPin);
-    setValidateErrorsMessages();
+    activatePageElements();
   }
 };
 
@@ -281,11 +286,11 @@ var setValidateErrorsMessages = function () {
   var roomNumberValue = adForm.querySelector('[name="rooms"]').value.toString();
   var capacity = adForm.querySelector('[name="capacity"]');
   var errorMessage = ROOMS_GUESTS[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : ROOMS_GUESTS[roomNumberValue].errorMessage;
-  adForm.querySelector('[name="capacity"]').setCustomValidity(errorMessage);
+  capacity.setCustomValidity(errorMessage);
 };
 
 setAddressFieldValue(mainPin, true);
-editFormsElementsActivation([adFormFields, mapFilterFields]);
+setPageDisabled(true);
 
 adForm.querySelector('[name="capacity"]').addEventListener('change', function () {
   setValidateErrorsMessages();
