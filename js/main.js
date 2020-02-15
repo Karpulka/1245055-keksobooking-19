@@ -318,8 +318,8 @@ var activatePage = function () {
   });
   mapPinsList.appendChild(fragment);
   // map.insertBefore(renderMapCard(adverts[0]), map.querySelector('.map__filters-container'));
-  document.removeEventListener('mouseup', mainPinMouseDownHandler);
-  document.removeEventListener('keyup', mainPinKeyDownHandler);
+  document.removeEventListener('mouseup', activatePageByClickMainPin);
+  document.removeEventListener('keyup', activatePagePressKeyEnterByMainPin);
 };
 
 var activatePageElements = function () {
@@ -328,13 +328,13 @@ var activatePageElements = function () {
   setValidateErrorsMessages();
 };
 
-var mainPinMouseDownHandler = function (evt) {
+var activatePageByClickMainPin = function (evt) {
   if (evt.button === 0) {
     activatePageElements();
   }
 };
 
-var mainPinKeyDownHandler = function (evt) {
+var activatePagePressKeyEnterByMainPin = function (evt) {
   if (evt.key === KEY_ENTER) {
     activatePageElements();
   }
@@ -362,16 +362,10 @@ var setValidateErrorsMessages = function () {
 setAddressFieldValue(mainPin, true);
 setPageDisabled(true);
 
-adForm.querySelector('[name="capacity"]').addEventListener('change', function () {
-  setValidateErrorsMessages();
-});
-
-adForm.querySelector('[name="rooms"]').addEventListener('change', function () {
-  setValidateErrorsMessages();
-});
-
-mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
-mainPin.addEventListener('keydown', mainPinKeyDownHandler);
+adForm.querySelector('[name="capacity"]').addEventListener('change', setValidateErrorsMessages);
+adForm.querySelector('[name="rooms"]').addEventListener('change', setValidateErrorsMessages);
+mainPin.addEventListener('mousedown', activatePageByClickMainPin);
+mainPin.addEventListener('keydown', activatePagePressKeyEnterByMainPin);
 
 var setValidityMessage = function (evt) {
   var element = evt.target;
