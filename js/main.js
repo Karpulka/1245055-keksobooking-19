@@ -394,7 +394,7 @@ Array.from(adFormFields).forEach(function (fieldBlock) {
 
 var setMinPrice = function (evt) {
   var minPrice = minPrices[evt.target.value];
-  adFormPriceField.setAttribute('min', parseFloat(minPrice.replace(' ', '')));
+  adFormPriceField.setAttribute('min', parseInt(minPrice.replace(' ', ''), 10));
   adFormPriceField.setAttribute('placeholder', minPrice);
 };
 
