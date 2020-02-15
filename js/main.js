@@ -55,6 +55,10 @@ var mainPin = map.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var adFormFields = adForm.children;
 var adFormAddressField = adForm.querySelector('[name="address"]');
+var adFormPriceField = adForm.querySelector('[name="price"]');
+var adFormTypeField = adForm.querySelector('[name="type"]');
+var adFormTimeInField = adForm.querySelector('[name="timein"]');
+var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
 var mapFilter = document.querySelector('.map__filters');
 var mapFilterFields = mapFilter.children;
 
@@ -125,6 +129,64 @@ var renderMapPin = function (advert) {
   pin.alt = advert.offer.title;
   return advertElement;
 };
+
+var minPrices = {
+  bungalo: '0',
+  flat: '1 000',
+  house: '5 000',
+  palace: '10 000'
+};
+
+var minPriceErrorMessage = {
+  '0': '«Бунгало» — минимальная цена за ночь 0',
+  '1000': '«Квартира» — минимальная цена за ночь 1 000',
+  '5000': '«Дом» — минимальная цена 5 000',
+  '10000': '«Дворец» — минимальная цена 10 000'
+};
+
+var getValidationMessage = [
+  {
+    name: 'tooShort',
+    getMinLength: function (element) {
+      return element.getAttribute('minlength');
+    },
+    message: function (element) {
+      return 'Имя должно состоять минимум из ' + this.getMinLength(element) + ' символов';
+    }
+  },
+  {
+    name: 'tooLong',
+    getMaxLength: function (element) {
+      return element.getAttribute('maxlength');
+    },
+    message: function (element) {
+      return 'Имя не должно превышать ' + this.getMaxLength(element) + ' символов';
+    }
+  },
+  {
+    name: 'valueMissing',
+    message: 'Обязательное поле'
+  },
+  {
+    name: 'rangeOverflow',
+    getMaxValue: function (element) {
+      return element.getAttribute('max');
+    },
+    message: function (element) {
+      return 'Максимальное значение — ' + this.getMaxValue(element);
+    }
+  },
+  {
+    name: 'rangeUnderflow',
+    getMinValue: function (element) {
+      return element.getAttribute('min');
+    },
+    message: function (element) {
+      return minPriceErrorMessage[this.getMinValue(element)];
+    }
+  }
+];
+
 /*
 var showListItemsByClass = function (listItems, classIndicators) {
   listItems.forEach(function (listItem) {
@@ -310,3 +372,41 @@ adForm.querySelector('[name="rooms"]').addEventListener('change', function () {
 
 mainPin.addEventListener('mousedown', mainPinMouseDownHandler);
 mainPin.addEventListener('keydown', mainPinKeyDownHandler);
+
+var setValidityMessage = function (evt) {
+  var element = evt.target;
+  for (var i = 0; i < getValidationMessage.length; i++) {
+    var item = getValidationMessage[i];
+    if (element.validity[item.name]) {
+      element.setCustomValidity(typeof item.message === 'string' ? item.message : item.message(element));
+      break;
+    }
+    element.setCustomValidity('');
+  }
+};
+
+Array.from(adFormFields).forEach(function (fieldBlock) {
+  var field = fieldBlock.querySelectorAll('input');
+  field.forEach(function (element) {
+    element.addEventListener('invalid', setValidityMessage);
+  });
+});
+
+var setMinPrice = function (evt) {
+  var minPrice = minPrices[evt.target.value];
+  adFormPriceField.setAttribute('min', parseFloat(minPrice.replace(' ', '')));
+  adFormPriceField.setAttribute('placeholder', minPrice);
+};
+
+var setTimeInOutValue = function (evt) {
+  var value = evt.target.value;
+  if (evt.target.getAttribute('name') === 'timein') {
+    adFormTimeOutField.value = value;
+  } else {
+    adFormTimeInField.value = value;
+  }
+};
+
+adFormTypeField.addEventListener('change', setMinPrice);
+adFormTimeInField.addEventListener('change', setTimeInOutValue);
+adFormTimeOutField.addEventListener('change', setTimeInOutValue);
