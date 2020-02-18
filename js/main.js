@@ -280,14 +280,14 @@ var disable = function (element) {
   element.setAttribute('disabled', 'disabled');
 };
 
-var elementDisableToggle = function (element) {
-  return !element.getAttribute('disabled') ? disable(element) : enable(element);
+var toggleElementDisable = function (element) {
+  return element.getAttribute('disabled') ? enable(element) : disable(element);
 };
 
 var setPageDisabled = function () {
   var formsElementsActivationToggle = function (list) {
     [].forEach.call(list, function (element) {
-      elementDisableToggle(element);
+      toggleElementDisable(element);
     });
   };
   [adFormFields, mapFilterFields].forEach(function (item) {
