@@ -144,23 +144,17 @@ var minPriceErrorMessage = {
   '10000': '«Дворец» — минимальная цена 10 000'
 };
 
-var getValidationMessage = [
+var validationMessages = [
   {
     name: 'tooShort',
-    getMinLength: function (element) {
-      return element.getAttribute('minlength');
-    },
     message: function (element) {
-      return 'Имя должно состоять минимум из ' + this.getMinLength(element) + ' символов';
+      return 'Имя должно состоять минимум из ' + element.getAttribute('minlength') + ' символов';
     }
   },
   {
     name: 'tooLong',
-    getMaxLength: function (element) {
-      return element.getAttribute('maxlength');
-    },
     message: function (element) {
-      return 'Имя не должно превышать ' + this.getMaxLength(element) + ' символов';
+      return 'Имя не должно превышать ' + element.getAttribute('maxlength') + ' символов';
     }
   },
   {
@@ -169,20 +163,14 @@ var getValidationMessage = [
   },
   {
     name: 'rangeOverflow',
-    getMaxValue: function (element) {
-      return element.getAttribute('max');
-    },
     message: function (element) {
-      return 'Максимальное значение — ' + this.getMaxValue(element);
+      return 'Максимальное значение — ' + element.getAttribute('max');
     }
   },
   {
     name: 'rangeUnderflow',
-    getMinValue: function (element) {
-      return element.getAttribute('min');
-    },
     message: function (element) {
-      return minPriceErrorMessage[this.getMinValue(element)];
+      return minPriceErrorMessage[element.getAttribute('min')];
     }
   }
 ];
@@ -369,8 +357,8 @@ mainPin.addEventListener('keydown', activatePagePressKeyEnterByMainPin);
 
 var setValidityMessage = function (evt) {
   var element = evt.target;
-  for (var i = 0; i < getValidationMessage.length; i++) {
-    var item = getValidationMessage[i];
+  for (var i = 0; i < validationMessages.length; i++) {
+    var item = validationMessages[i];
     if (element.validity[item.name]) {
       element.setCustomValidity(typeof item.message === 'string' ? item.message : item.message(element));
       break;
