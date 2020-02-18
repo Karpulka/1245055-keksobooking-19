@@ -284,7 +284,7 @@ var toggleDisabledElement = function (element) {
   return element.getAttribute('disabled') ? enable(element) : disable(element);
 };
 
-var setPageDisabled = function () {
+var togglePageDisabled = function () {
   var formsElementsActivationToggle = function (list) {
     [].forEach.call(list, toggleDisabledElement);
   };
@@ -294,7 +294,7 @@ var setPageDisabled = function () {
 };
 
 var activatePage = function () {
-  setPageDisabled();
+  togglePageDisabled();
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
   var adverts = getAdverts(ADVERT_ARRAY_LENGTH);
@@ -304,8 +304,8 @@ var activatePage = function () {
   });
   mapPinsList.appendChild(fragment);
   // map.insertBefore(renderMapCard(adverts[0]), map.querySelector('.map__filters-container'));
-  document.removeEventListener('mouseup', activatePageByClickMainPin);
-  document.removeEventListener('keyup', activatePagePressKeyEnterByMainPin);
+  document.removeEventListener('mouseup', onMainPinClick);
+  document.removeEventListener('keyup', onMainPinKeyPress);
 };
 
 var activatePageElements = function () {
@@ -314,13 +314,13 @@ var activatePageElements = function () {
   setValidateErrorsMessages();
 };
 
-var activatePageByClickMainPin = function (evt) {
+var onMainPinClick = function (evt) {
   if (evt.button === 0) {
     activatePageElements();
   }
 };
 
-var activatePagePressKeyEnterByMainPin = function (evt) {
+var onMainPinKeyPress = function (evt) {
   if (evt.key === KEY_ENTER) {
     activatePageElements();
   }
@@ -346,12 +346,12 @@ var setValidateErrorsMessages = function () {
 };
 
 setAddressFieldValue(mainPin, true);
-setPageDisabled(true);
+togglePageDisabled(true);
 
 adForm.querySelector('[name="capacity"]').addEventListener('change', setValidateErrorsMessages);
 adForm.querySelector('[name="rooms"]').addEventListener('change', setValidateErrorsMessages);
-mainPin.addEventListener('mousedown', activatePageByClickMainPin);
-mainPin.addEventListener('keydown', activatePagePressKeyEnterByMainPin);
+mainPin.addEventListener('mousedown', onMainPinClick);
+mainPin.addEventListener('keydown', onMainPinKeyPress);
 
 var setValidityMessage = function (evt) {
   var element = evt.target;
