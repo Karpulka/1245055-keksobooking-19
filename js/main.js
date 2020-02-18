@@ -62,6 +62,51 @@ var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
 var mapFilter = document.querySelector('.map__filters');
 var mapFilterFields = mapFilter.children;
 
+var minPrices = {
+  bungalo: '0',
+  flat: '1 000',
+  house: '5 000',
+  palace: '10 000'
+};
+
+var minPriceErrorMessage = {
+  '0': '«Бунгало» — минимальная цена за ночь 0',
+  '1000': '«Квартира» — минимальная цена за ночь 1 000',
+  '5000': '«Дом» — минимальная цена 5 000',
+  '10000': '«Дворец» — минимальная цена 10 000'
+};
+
+var validationMessages = [
+  {
+    name: 'tooShort',
+    getMessage: function (element) {
+      return 'Имя должно состоять минимум из ' + element.getAttribute('minlength') + ' символов';
+    }
+  },
+  {
+    name: 'tooLong',
+    getMessage: function (element) {
+      return 'Имя не должно превышать ' + element.getAttribute('maxlength') + ' символов';
+    }
+  },
+  {
+    name: 'valueMissing',
+    message: 'Обязательное поле'
+  },
+  {
+    name: 'rangeOverflow',
+    getMessage: function (element) {
+      return 'Максимальное значение — ' + element.getAttribute('max');
+    }
+  },
+  {
+    name: 'rangeUnderflow',
+    getMessage: function (element) {
+      return minPriceErrorMessage[element.getAttribute('min')];
+    }
+  }
+];
+
 function LocationCoordinates(x, y, offsetX, offsetY) {
   offsetX = offsetX ? offsetX : 0;
   offsetY = offsetY ? offsetY : 0;
@@ -129,51 +174,6 @@ var renderMapPin = function (advert) {
   pin.alt = advert.offer.title;
   return advertElement;
 };
-
-var minPrices = {
-  bungalo: '0',
-  flat: '1 000',
-  house: '5 000',
-  palace: '10 000'
-};
-
-var minPriceErrorMessage = {
-  '0': '«Бунгало» — минимальная цена за ночь 0',
-  '1000': '«Квартира» — минимальная цена за ночь 1 000',
-  '5000': '«Дом» — минимальная цена 5 000',
-  '10000': '«Дворец» — минимальная цена 10 000'
-};
-
-var validationMessages = [
-  {
-    name: 'tooShort',
-    getMessage: function (element) {
-      return 'Имя должно состоять минимум из ' + element.getAttribute('minlength') + ' символов';
-    }
-  },
-  {
-    name: 'tooLong',
-    getMessage: function (element) {
-      return 'Имя не должно превышать ' + element.getAttribute('maxlength') + ' символов';
-    }
-  },
-  {
-    name: 'valueMissing',
-    message: 'Обязательное поле'
-  },
-  {
-    name: 'rangeOverflow',
-    getMessage: function (element) {
-      return 'Максимальное значение — ' + element.getAttribute('max');
-    }
-  },
-  {
-    name: 'rangeUnderflow',
-    getMessage: function (element) {
-      return minPriceErrorMessage[element.getAttribute('min')];
-    }
-  }
-];
 
 /*
 var showListItemsByClass = function (listItems, classIndicators) {
@@ -345,14 +345,6 @@ var setValidateErrorsMessages = function () {
   capacity.setCustomValidity(errorMessage);
 };
 
-setAddressFieldValue(mainPin, true);
-togglePageDisabled(true);
-
-adForm.querySelector('[name="capacity"]').addEventListener('change', setValidateErrorsMessages);
-adForm.querySelector('[name="rooms"]').addEventListener('change', setValidateErrorsMessages);
-mainPin.addEventListener('mousedown', onMainPinClick);
-mainPin.addEventListener('keydown', onMainPinKeyPress);
-
 var setValidityMessage = function (evt) {
   var element = evt.target;
   for (var i = 0; i < validationMessages.length; i++) {
@@ -364,13 +356,6 @@ var setValidityMessage = function (evt) {
     element.setCustomValidity('');
   }
 };
-
-Array.from(adFormFields).forEach(function (fieldBlock) {
-  var field = fieldBlock.querySelectorAll('input');
-  field.forEach(function (element) {
-    element.addEventListener('invalid', setValidityMessage);
-  });
-});
 
 var setMinPrice = function (evt) {
   var minPrice = minPrices[evt.target.value];
@@ -387,6 +372,20 @@ var setTimeInOutValue = function (evt) {
   }
 };
 
+setAddressFieldValue(mainPin, true);
+togglePageDisabled(true);
+
+Array.from(adFormFields).forEach(function (fieldBlock) {
+  var field = fieldBlock.querySelectorAll('input');
+  field.forEach(function (element) {
+    element.addEventListener('invalid', setValidityMessage);
+  });
+});
+
+adForm.querySelector('[name="capacity"]').addEventListener('change', setValidateErrorsMessages);
+adForm.querySelector('[name="rooms"]').addEventListener('change', setValidateErrorsMessages);
+mainPin.addEventListener('mousedown', onMainPinClick);
+mainPin.addEventListener('keydown', onMainPinKeyPress);
 adFormTypeField.addEventListener('change', setMinPrice);
 adFormTimeInField.addEventListener('change', setTimeInOutValue);
 adFormTimeOutField.addEventListener('change', setTimeInOutValue);
