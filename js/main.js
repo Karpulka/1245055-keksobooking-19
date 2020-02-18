@@ -147,13 +147,13 @@ var minPriceErrorMessage = {
 var validationMessages = [
   {
     name: 'tooShort',
-    message: function (element) {
+    getMessage: function (element) {
       return 'Имя должно состоять минимум из ' + element.getAttribute('minlength') + ' символов';
     }
   },
   {
     name: 'tooLong',
-    message: function (element) {
+    getMessage: function (element) {
       return 'Имя не должно превышать ' + element.getAttribute('maxlength') + ' символов';
     }
   },
@@ -163,13 +163,13 @@ var validationMessages = [
   },
   {
     name: 'rangeOverflow',
-    message: function (element) {
+    getMessage: function (element) {
       return 'Максимальное значение — ' + element.getAttribute('max');
     }
   },
   {
     name: 'rangeUnderflow',
-    message: function (element) {
+    getMessage: function (element) {
       return minPriceErrorMessage[element.getAttribute('min')];
     }
   }
@@ -358,7 +358,7 @@ var setValidityMessage = function (evt) {
   for (var i = 0; i < validationMessages.length; i++) {
     var item = validationMessages[i];
     if (element.validity[item.name]) {
-      element.setCustomValidity(typeof item.message === 'string' ? item.message : item.message(element));
+      element.setCustomValidity(typeof item.message === 'string' ? item.message : item.getMessage(element));
       break;
     }
     element.setCustomValidity('');
