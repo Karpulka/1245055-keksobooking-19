@@ -7,18 +7,22 @@
   var adForm = document.querySelector('.ad-form');
 
   var activatePage = function () {
-    window.form.toggleFormDisabled();
-    map.classList.remove('map--faded');
-    adForm.classList.remove('ad-form--disabled');
-    var adverts = window.advert.getAdverts(window.data.ADVERT_ARRAY_LENGTH);
-    var fragment = document.createDocumentFragment();
-    adverts.forEach(function (advert) {
-      fragment.appendChild(window.pin.renderMapPin(advert));
-    });
-    mapPinsList.appendChild(fragment);
-    map.insertBefore(window.advert.renderMapCard(adverts[0]), map.querySelector('.map__filters-container'));
-    document.removeEventListener('mouseup', window.pin.onMainPinClick);
-    document.removeEventListener('keyup', window.pin.onMainPinKeyPress);
+    if (map.classList.contains('map--faded')) {
+      window.form.toggleFormDisabled();
+      map.classList.remove('map--faded');
+      adForm.classList.remove('ad-form--disabled');
+      var adverts = window.advert.getAdverts(window.data.ADVERT_ARRAY_LENGTH);
+      var fragment = document.createDocumentFragment();
+      adverts.forEach(function (advert) {
+        var pin = window.pin.renderMapPin(advert);
+        fragment.appendChild(pin);
+        pin.addEventListener('click', window.pin.onPinClick.bind(null, advert));
+        pin.addEventListener('keydown', window.pin.onPinEnterPress.bind(null, advert));
+      });
+      mapPinsList.appendChild(fragment);
+      document.removeEventListener('mousedown', window.pin.onMainPinClick);
+      document.removeEventListener('keydown', window.pin.onMainPinEnterPress);
+    }
   };
 
   var activatePageElements = function () {
@@ -31,5 +35,5 @@
   window.form.toggleFormDisabled(true);
 
   mainPin.addEventListener('mousedown', window.pin.onMainPinClick.bind(null, activatePageElements));
-  mainPin.addEventListener('keydown', window.pin.onMainPinKeyPress.bind(null, activatePageElements));
+  mainPin.addEventListener('keydown', window.pin.onMainPinEnterPress.bind(null, activatePageElements));
 })();

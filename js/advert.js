@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var map = document.querySelector('.map');
   var mapCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var stringTemplates = {
@@ -120,8 +121,39 @@
     return cardElement;
   };
 
+  var showAdvert = function (advert) {
+    removeCard();
+    var newCard = window.advert.renderMapCard(advert);
+    var buttonCloseCard = newCard.querySelector('.popup__close');
+    buttonCloseCard.addEventListener('click', onAdvertCardCloseClick);
+    buttonCloseCard.addEventListener('keydown', onAdvertCardCloseEnterPress);
+    document.addEventListener('keydown', onAdvertCardCloseEscape);
+    map.insertBefore(newCard, map.querySelector('.map__filters-container'));
+  };
+
+  var onAdvertCardCloseEnterPress = function (evt) {
+    window.util.isEnterEvent(evt, removeCard);
+  };
+
+  var onAdvertCardCloseClick = function () {
+    removeCard();
+  };
+
+  var onAdvertCardCloseEscape = function (evt) {
+    window.util.isEscapeEvent(evt, removeCard);
+    document.removeEventListener('keydown', onAdvertCardCloseEscape);
+  };
+
+  var removeCard = function () {
+    var card = map.querySelector('.map__card');
+    if (card) {
+      card.remove();
+    }
+  };
+
   window.advert = {
     getAdverts: getAdverts,
-    renderMapCard: renderMapCard
+    renderMapCard: renderMapCard,
+    showAdvert: showAdvert
   };
 })();

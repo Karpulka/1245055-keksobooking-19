@@ -2,10 +2,17 @@
 
 (function () {
   var KEY_ENTER = 'Enter';
+  var KEY_ESCAPE = 'Escape';
   var LEFT_MOUSE_BUTTON = 0;
 
   var isEnterEvent = function (evt, action) {
     if (evt.key === KEY_ENTER) {
+      action();
+    }
+  };
+
+  var isEscapeEvent = function (evt, action) {
+    if (evt.key === KEY_ESCAPE) {
       action();
     }
   };
@@ -28,6 +35,7 @@
 
   window.util = {
     isEnterEvent: isEnterEvent,
+    isEscapeEvent: isEscapeEvent,
     getRandomValue: getRandomValue,
     getRandomItemFromArray: getRandomItemFromArray,
     isLeftMouseButtonClick: isLeftMouseButtonClick

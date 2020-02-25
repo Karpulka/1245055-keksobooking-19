@@ -19,13 +19,23 @@
     window.util.isLeftMouseButtonClick(evt, action);
   };
 
-  var onMainPinKeyPress = function (action, evt) {
+  var onMainPinEnterPress = function (action, evt) {
     window.util.isEnterEvent(evt, action);
+  };
+
+  var onPinClick = function (advert) {
+    window.advert.showAdvert(advert);
+  };
+
+  var onPinEnterPress = function (advert, evt) {
+    window.util.isEnterEvent(evt, window.advert.showAdvert.bind(null, advert));
   };
 
   window.pin = {
     onMainPinClick: onMainPinClick,
-    onMainPinKeyPress: onMainPinKeyPress,
-    renderMapPin: renderMapPin
+    onMainPinEnterPress: onMainPinEnterPress,
+    renderMapPin: renderMapPin,
+    onPinClick: onPinClick,
+    onPinEnterPress: onPinEnterPress
   };
 })();
