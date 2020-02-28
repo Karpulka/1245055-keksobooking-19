@@ -20,20 +20,19 @@
         pin.addEventListener('keydown', window.pin.onPinEnterPress.bind(null, advert));
       });
       mapPinsList.appendChild(fragment);
-      document.removeEventListener('mousedown', window.pin.onMainPinClick);
-      document.removeEventListener('keydown', window.pin.onMainPinEnterPress);
+      document.removeEventListener('mousedown', window.mainPin.onMainPinClick);
+      document.removeEventListener('keydown', window.mainPin.onMainPinEnterPress);
     }
   };
 
   var activatePageElements = function () {
     activatePage();
-    window.form.setAddressFieldValue(mainPin);
     window.form.setValidateErrorsMessages();
   };
 
   window.form.setAddressFieldValue(mainPin, true);
   window.form.toggleFormDisabled(true);
 
-  mainPin.addEventListener('mousedown', window.pin.onMainPinClick.bind(null, activatePageElements));
-  mainPin.addEventListener('keydown', window.pin.onMainPinEnterPress.bind(null, activatePageElements));
+  mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements));
+  mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements));
 })();

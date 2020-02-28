@@ -15,14 +15,6 @@
     return advertElement;
   };
 
-  var onMainPinClick = function (action, evt) {
-    window.util.isLeftMouseButtonClick(evt, action);
-  };
-
-  var onMainPinEnterPress = function (action, evt) {
-    window.util.isEnterEvent(evt, action);
-  };
-
   var onPinClick = function (advert) {
     window.advert.showAdvert(advert);
   };
@@ -32,8 +24,6 @@
   };
 
   window.pin = {
-    onMainPinClick: onMainPinClick,
-    onMainPinEnterPress: onMainPinEnterPress,
     renderMapPin: renderMapPin,
     onPinClick: onPinClick,
     onPinEnterPress: onPinEnterPress
