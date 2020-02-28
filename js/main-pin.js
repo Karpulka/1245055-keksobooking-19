@@ -1,7 +1,17 @@
 'use strict';
 
 (function () {
-  var mainPin = document.querySelector('.map__pin--main');
+  var map = document.querySelector('.map');
+  var mainPin = map.querySelector('.map__pin--main');
+  var mainPinPosition = window.pin.getPinPosition(mainPin);
+  var rangeY = {
+    min: 130 + mainPinPosition.y,
+    max: 630 - mainPinPosition.y
+  };
+  var rangeX = {
+    min: 0 - mainPinPosition.x,
+    max: map.clientWidth - mainPinPosition.x
+  };
 
   var onMainPinClick = function (action, evt) {
     window.util.isLeftMouseButtonClick(evt, action);
@@ -24,8 +34,11 @@
       startCoordinates.x = moveEvt.clientX;
       startCoordinates.y = moveEvt.clientY;
 
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      var offsetY = mainPin.offsetTop - shift.y;
+      var offsetX = mainPin.offsetLeft - shift.x;
+
+      mainPin.style.top = offsetY <= rangeY.max && offsetY >= rangeY.min ? offsetY + 'px' : mainPin.style.top;
+      mainPin.style.left = offsetX <= rangeX.max && offsetX >= rangeX.min ? offsetX + 'px' : mainPin.style.left;
 
       window.form.setAddressFieldValue(mainPin);
     }

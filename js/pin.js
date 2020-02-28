@@ -23,9 +23,21 @@
     window.util.isEnterEvent(evt, window.advert.showAdvert.bind(null, advert));
   };
 
+  var getPinPosition = function (pin, isPageNoActive) {
+    var height = pin.offsetHeight;
+    var width = pin.offsetWidth;
+    var afterHeight = isPageNoActive ? 0 : parseFloat(window.getComputedStyle(pin, ':after').height.split('px')[0]);
+    var pinPosition = {
+      x: width / 2,
+      y: height / 2 + afterHeight
+    };
+    return pinPosition;
+  };
+
   window.pin = {
     renderMapPin: renderMapPin,
     onPinClick: onPinClick,
-    onPinEnterPress: onPinEnterPress
+    onPinEnterPress: onPinEnterPress,
+    getPinPosition: getPinPosition
   };
 })();
