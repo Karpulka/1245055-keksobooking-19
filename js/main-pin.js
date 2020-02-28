@@ -41,7 +41,7 @@
       mainPin.style.left = offsetX <= rangeX.max && offsetX >= rangeX.min ? offsetX + 'px' : mainPin.style.left;
 
       window.form.setAddressFieldValue(mainPin);
-    }
+    };
 
     var onMaiPinMouseUp = function (upEvt) {
       upEvt.preventDefault();
