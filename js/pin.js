@@ -6,8 +6,8 @@
   var renderMapPin = function (advert) {
     var advertElement = mapPinTemplate.cloneNode(true);
     var pin = advertElement.querySelector('img');
-    var locationX = advert.offer.location.x + Math.ceil(pin.style.width / 2);
-    var locationY = advert.offer.location.y + Math.ceil(pin.style.height / 2);
+    var locationX = advert.location.x;
+    var locationY = advert.location.y;
     advertElement.style.left = locationX + 'px';
     advertElement.style.top = locationY + 'px';
     pin.src = advert.author.avatar;
