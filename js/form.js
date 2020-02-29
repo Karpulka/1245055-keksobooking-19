@@ -97,7 +97,9 @@
     var map = document.querySelector('.map');
     var mainPin = map.querySelector('.map__pin--main');
 
-    setAddressFieldValue(mainPin, true);
+    var pageIsActive = adForm.classList.contains('ad-form--disabled') ? true : false;
+
+    setAddressFieldValue(mainPin, pageIsActive);
   };
 
   var toggleFormDisabled = function () {

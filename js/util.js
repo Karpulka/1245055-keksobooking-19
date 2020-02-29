@@ -38,7 +38,17 @@
       document.querySelector('.error').remove();
 
       document.removeEventListener('click', onErrorWindowClose);
+      document.removeEventListener('keydown', onErrorWindowClose);
       evt.target.removeEventListener('keydown', onErrorWindowClose);
+    }
+  };
+
+  var onSuccessWindowClose = function (evt) {
+    if (evt.type === 'click' || evt.key === KEY_ESCAPE) {
+      document.querySelector('.success').remove();
+
+      document.removeEventListener('click', onSuccessWindowClose);
+      document.removeEventListener('keydown', onSuccessWindowClose);
     }
   };
 
@@ -56,12 +66,24 @@
     errorCloseButton.focus();
   };
 
+  var showSuccessMessage = function () {
+    var fragment = document.createDocumentFragment();
+    var successBlock = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+
+    fragment.appendChild(successBlock);
+    document.querySelector('body').appendChild(successBlock);
+
+    document.addEventListener('click', onSuccessWindowClose);
+    document.addEventListener('keydown', onSuccessWindowClose);
+  };
+
   window.util = {
     isEnterEvent: isEnterEvent,
     isEscapeEvent: isEscapeEvent,
     getRandomValue: getRandomValue,
     getRandomItemFromArray: getRandomItemFromArray,
     isLeftMouseButtonClick: isLeftMouseButtonClick,
-    showErrorMessage: showErrorMessage
+    showErrorMessage: showErrorMessage,
+    showSuccessMessage: showSuccessMessage
   };
 })();

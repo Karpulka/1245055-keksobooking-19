@@ -47,6 +47,7 @@
   };
 
   var onSuccsess = function () {
+    window.util.showSuccessMessage();
     deactivatePage();
     window.form.toggleFormDisabled();
   };
@@ -56,10 +57,10 @@
     mainPin.style.left = mainPinStartCoords.x;
     mainPin.style.top = mainPinStartCoords.y;
 
-    window.form.clearForm();
-
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
+
+    window.form.clearForm();
 
     mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
     mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
