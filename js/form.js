@@ -80,12 +80,8 @@
   var setAddressFieldValue = function (pin, isPageNoActive) {
     var left = parseFloat(pin.style.left.split('px')[0]);
     var top = parseFloat(pin.style.top.split('px')[0]);
-    var height = pin.offsetHeight;
-    var width = pin.offsetWidth;
-    var afterHeight = isPageNoActive ? 0 : parseFloat(window.getComputedStyle(pin, ':after').height.split('px')[0]);
-    var offsetX = width / 2;
-    var offsetY = height / 2 + afterHeight;
-    var coordinates = new window.data.LocationCoordinate(left, top, offsetX, offsetY);
+    var pinPosition = window.pin.getPinPosition(pin, isPageNoActive);
+    var coordinates = new window.data.LocationCoordinate(left, top, pinPosition.x, pinPosition.y);
     adFormAddressField.value = coordinates.x + ', ' + coordinates.y;
   };
 
