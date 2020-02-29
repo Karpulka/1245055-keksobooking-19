@@ -3,7 +3,7 @@
 (function () {
   var RequestUrl = {
     URL_LOAD: 'https://js.dump.academy/keksobooking/data',
-    URL_SEND: 'https://js.dump.academy/keksobooking'
+    URL_SEND: 'https://js.dump.academy/keksobooking1'
   };
 
   var Method = {
