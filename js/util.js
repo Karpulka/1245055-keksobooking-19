@@ -34,47 +34,47 @@
   };
 
   var onErrorWindowClose = function (evt) {
-    if (evt.type === 'click' || evt.key === KEY_ENTER) {
-      document.querySelector('.error-message').remove();
+    if (evt.type === 'click' || evt.key === KEY_ENTER || evt.key === KEY_ESCAPE) {
+      document.querySelector('.error').remove();
 
-      evt.target.removeEventListener('click', onErrorWindowClose);
+      document.removeEventListener('click', onErrorWindowClose);
+      document.removeEventListener('keydown', onErrorWindowClose);
       evt.target.removeEventListener('keydown', onErrorWindowClose);
     }
   };
 
-  var showErrorMessage = function (message) {
+  var onSuccessWindowClose = function (evt) {
+    if (evt.type === 'click' || evt.key === KEY_ESCAPE) {
+      document.querySelector('.success').remove();
+
+      document.removeEventListener('click', onSuccessWindowClose);
+      document.removeEventListener('keydown', onSuccessWindowClose);
+    }
+  };
+
+  var showErrorMessage = function () {
     var fragment = document.createDocumentFragment();
-    var errorContentBlock = document.createElement('div');
-    var errorTitleBlock = document.createElement('div');
-    var errorMessageBlock = document.createElement('div');
-    var errorCloseButton = document.createElement('span');
+    var errorBlock = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+    var errorCloseButton = errorBlock.querySelector('.error__button');
 
-    errorContentBlock.classList.add('error-message', 'hidden');
+    fragment.appendChild(errorBlock);
+    document.querySelector('body').appendChild(errorBlock);
 
-    errorTitleBlock.classList.add('error-title');
-    errorTitleBlock.textContent = 'Ошибка!';
-
-    errorMessageBlock.classList.add('error-description');
-    errorMessageBlock.textContent = message;
-
-    errorCloseButton.classList.add('error-close');
-    errorCloseButton.setAttribute('tabindex', 0);
-    errorCloseButton.textContent = 'x';
-
-    errorContentBlock.appendChild(errorTitleBlock);
-    errorContentBlock.appendChild(errorMessageBlock);
-    errorContentBlock.appendChild(errorCloseButton);
-
-    fragment.appendChild(errorContentBlock);
-
-    document.querySelector('body').appendChild(fragment);
-
-    errorCloseButton.addEventListener('click', onErrorWindowClose);
+    document.addEventListener('click', onErrorWindowClose);
     errorCloseButton.addEventListener('keydown', onErrorWindowClose);
 
-    document.querySelector('.error-message').classList.remove('hidden');
-
     errorCloseButton.focus();
+  };
+
+  var showSuccessMessage = function () {
+    var fragment = document.createDocumentFragment();
+    var successBlock = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+
+    fragment.appendChild(successBlock);
+    document.querySelector('body').appendChild(successBlock);
+
+    document.addEventListener('click', onSuccessWindowClose);
+    document.addEventListener('keydown', onSuccessWindowClose);
   };
 
   window.util = {
@@ -83,6 +83,7 @@
     getRandomValue: getRandomValue,
     getRandomItemFromArray: getRandomItemFromArray,
     isLeftMouseButtonClick: isLeftMouseButtonClick,
-    showErrorMessage: showErrorMessage
+    showErrorMessage: showErrorMessage,
+    showSuccessMessage: showSuccessMessage
   };
 })();

@@ -1,7 +1,15 @@
 'use strict';
 
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data';
+  var RequestUrl = {
+    URL_LOAD: 'https://js.dump.academy/keksobooking/data',
+    URL_SEND: 'https://js.dump.academy/keksobooking'
+  };
+
+  var Method = {
+    GET: 'GET',
+    POST: 'POST'
+  };
   var StatusCode = {
     OK: 200
   };
@@ -14,7 +22,9 @@
     return {x: x, y: y};
   };
 
-  var load = function (onSuccess, onError) {
+  var load = function (method, url, onSuccess, onError, data) {
+    method = method ? method : Method.GET;
+    url = url ? url : RequestUrl.URL_LOAD;
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -31,12 +41,17 @@
     xhr.addEventListener('timeout', function () {
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
-    xhr.open('GET', URL);
-    xhr.send();
+    xhr.open(method, url);
+    xhr.send(data);
+  };
+
+  var prefillRequest = function (method, url) {
+    return load.bind(null, method, url);
   };
 
   window.data = {
     LocationCoordinate: LocationCoordinate,
-    load: load
+    load: prefillRequest(Method.GET, RequestUrl.URL_LOAD),
+    send: prefillRequest(Method.POST, RequestUrl.URL_SEND)
   };
 })();

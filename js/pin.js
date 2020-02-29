@@ -34,10 +34,18 @@
     return pinPosition;
   };
 
+  var removePins = function () {
+    var pinsList = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pinsList.forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
   window.pin = {
     renderMapPin: renderMapPin,
     onPinClick: onPinClick,
     onPinEnterPress: onPinEnterPress,
-    getPinPosition: getPinPosition
+    getPinPosition: getPinPosition,
+    removePins: removePins
   };
 })();

@@ -84,7 +84,22 @@
   };
 
   var toggleDisabledElement = function (element) {
+    var elementDisable = element.getAttribute('disabled');
+    if (elementDisable) {
+      adForm.addEventListener('reset', onFormReset);
+    } else {
+      adForm.removeEventListener('reset', onFormReset);
+    }
     return element.getAttribute('disabled') ? enable(element) : disable(element);
+  };
+
+  var onFormReset = function () {
+    var map = document.querySelector('.map');
+    var mainPin = map.querySelector('.map__pin--main');
+
+    var pageIsActive = adForm.classList.contains('ad-form--disabled') ? true : false;
+
+    setAddressFieldValue(mainPin, pageIsActive);
   };
 
   var toggleFormDisabled = function () {
@@ -101,7 +116,7 @@
     var top = parseFloat(pin.style.top.split('px')[0]);
     var pinPosition = window.pin.getPinPosition(pin, isPageNoActive);
     var coordinates = new window.data.LocationCoordinate(left, top, pinPosition.x, pinPosition.y);
-    adFormAddressField.value = coordinates.x + ', ' + coordinates.y;
+    adFormAddressField.setAttribute('value', coordinates.x + ', ' + coordinates.y);
   };
 
   var setValidateErrorsMessages = function () {
@@ -138,6 +153,10 @@
     }
   };
 
+  var clearForm = function () {
+    adForm.reset();
+  };
+
   Array.from(adFormFields).forEach(function (fieldBlock) {
     var field = fieldBlock.querySelectorAll('input');
     field.forEach(function (element) {
@@ -155,6 +174,7 @@
   window.form = {
     toggleFormDisabled: toggleFormDisabled,
     setAddressFieldValue: setAddressFieldValue,
-    setValidateErrorsMessages: setValidateErrorsMessages
+    setValidateErrorsMessages: setValidateErrorsMessages,
+    clearForm: clearForm
   };
 })();
