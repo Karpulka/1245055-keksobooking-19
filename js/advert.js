@@ -1,8 +1,12 @@
 'use strict';
 
 (function () {
-  var map = document.querySelector('.map');
-  var mapCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+  var TYPES_TITLE = {
+    palace: 'Дворец',
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало'
+  };
 
   var stringTemplates = {
     capacity: {
@@ -16,14 +20,8 @@
     }
   };
 
-  var getAdverts = function (count) {
-    var adverts = [];
-    for (var i = 1; i < count + 1; i++) {
-      var obj = window.data.makeAdvert(i);
-      adverts.push(obj);
-    }
-    return adverts;
-  };
+  var map = document.querySelector('.map');
+  var mapCardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
   var showListItemsByClass = function (listItems, classIndicators) {
     listItems.forEach(function (listItem) {
@@ -110,7 +108,7 @@
       'title': offer.title,
       'text--address': offer.address,
       'text--price': price,
-      'type': window.data.TYPES_TITLE[offer.type],
+      'type': TYPES_TITLE[offer.type],
       'text--capacity': getInfoString(capacity),
       'text--time': getInfoString(time, stringTemplates.time.delimeter),
       'description': offer.description
@@ -152,7 +150,6 @@
   };
 
   window.advert = {
-    getAdverts: getAdverts,
     renderMapCard: renderMapCard,
     showAdvert: showAdvert
   };

@@ -1,15 +1,24 @@
 'use strict';
 
 (function () {
-  var adForm = document.querySelector('.ad-form');
-  var adFormFields = adForm.children;
-  var adFormAddressField = adForm.querySelector('[name="address"]');
-  var adFormPriceField = adForm.querySelector('[name="price"]');
-  var adFormTypeField = adForm.querySelector('[name="type"]');
-  var adFormTimeInField = adForm.querySelector('[name="timein"]');
-  var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
-  var mapFilter = document.querySelector('.map__filters');
-  var mapFilterFields = mapFilter.children;
+  var ROOMS_GUESTS = {
+    '1': {
+      guests: ['1'],
+      errorMessage: '1 комната — «для 1 гостя»'
+    },
+    '2': {
+      guests: ['1', '2'],
+      errorMessage: '2 комнаты — «для 2 гостей» или «для 1 гостя»'
+    },
+    '3': {
+      guests: ['1', '2', '3'],
+      errorMessage: '«для 3 гостей», «для 2 гостей» или «для 1 гостя»'
+    },
+    '100': {
+      guests: ['0'],
+      errorMessage: '100 комнат — «не для гостей»'
+    }
+  };
 
   var minPrices = {
     bungalo: '0',
@@ -56,6 +65,16 @@
     }
   ];
 
+  var adForm = document.querySelector('.ad-form');
+  var adFormFields = adForm.children;
+  var adFormAddressField = adForm.querySelector('[name="address"]');
+  var adFormPriceField = adForm.querySelector('[name="price"]');
+  var adFormTypeField = adForm.querySelector('[name="type"]');
+  var adFormTimeInField = adForm.querySelector('[name="timein"]');
+  var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
+  var mapFilter = document.querySelector('.map__filters');
+  var mapFilterFields = mapFilter.children;
+
   var enable = function (element) {
     element.removeAttribute('disabled');
   };
@@ -88,7 +107,7 @@
   var setValidateErrorsMessages = function () {
     var roomNumberValue = adForm.querySelector('[name="rooms"]').value.toString();
     var capacity = adForm.querySelector('[name="capacity"]');
-    var errorMessage = window.data.ROOMS_GUESTS[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : window.data.ROOMS_GUESTS[roomNumberValue].errorMessage;
+    var errorMessage = ROOMS_GUESTS[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : ROOMS_GUESTS[roomNumberValue].errorMessage;
     capacity.setCustomValidity(errorMessage);
   };
 

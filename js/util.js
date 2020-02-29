@@ -34,7 +34,7 @@
   };
 
   var onErrorWindowClose = function (evt) {
-    if (evt.type === 'click' || evt.key === ENTER_KEY) {
+    if (evt.type === 'click' || evt.key === KEY_ENTER) {
       document.querySelector('.error-message').remove();
 
       evt.target.removeEventListener('click', onErrorWindowClose);

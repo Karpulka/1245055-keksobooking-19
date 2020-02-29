@@ -11,7 +11,7 @@
       window.form.toggleFormDisabled();
       map.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
-
+      window.form.setAddressFieldValue(mainPin);
       document.removeEventListener('mousedown', window.mainPin.onMainPinClick);
       document.removeEventListener('keydown', window.mainPin.onMainPinEnterPress);
     }
@@ -19,7 +19,6 @@
 
   var onSuccess = function (data) {
     var adverts = data;
-    console.log(data);
     var fragment = document.createDocumentFragment();
     adverts.forEach(function (advert) {
       if (advert.offer) {
@@ -36,13 +35,11 @@
     activatePage();
     window.data.load(onSuccess, window.util.showErrorMessage);
     window.form.setValidateErrorsMessages();
-    mainPin.removeEventListener('mousedown', window.mainPin.onMainPinClick);
-    mainPin.removeEventListener('keydown', window.mainPin.onMainPinEnterPress);
   };
 
   window.form.setAddressFieldValue(mainPin, true);
   window.form.toggleFormDisabled(true);
 
-  mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements));
-  mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements));
+  mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
+  mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
 })();
