@@ -5,7 +5,7 @@
   var mainPin = map.querySelector('.map__pin--main');
   var mainPinPosition = window.pin.getPinPosition(mainPin);
   var rangeY = {
-    min: 130 + mainPinPosition.y,
+    min: 130 - mainPinPosition.y,
     max: 630 - mainPinPosition.y
   };
   var rangeX = {
