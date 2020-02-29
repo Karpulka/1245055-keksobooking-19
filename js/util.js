@@ -33,11 +33,56 @@
     return array[Math.floor(Math.random() * (max - min)) + min];
   };
 
+  var onErrorWindowClose = function (evt) {
+    if (evt.type === 'click' || evt.key === ENTER_KEY) {
+      document.querySelector('.error-message').remove();
+
+      evt.target.removeEventListener('click', onErrorWindowClose);
+      evt.target.removeEventListener('keydown', onErrorWindowClose);
+    }
+  };
+
+  var showErrorMessage = function (message) {
+    var fragment = document.createDocumentFragment();
+    var errorContentBlock = document.createElement('div');
+    var errorTitleBlock = document.createElement('div');
+    var errorMessageBlock = document.createElement('div');
+    var errorCloseButton = document.createElement('span');
+
+    errorContentBlock.classList.add('error-message', 'hidden');
+
+    errorTitleBlock.classList.add('error-title');
+    errorTitleBlock.textContent = 'Ошибка!';
+
+    errorMessageBlock.classList.add('error-description');
+    errorMessageBlock.textContent = message;
+
+    errorCloseButton.classList.add('error-close');
+    errorCloseButton.setAttribute('tabindex', 0);
+    errorCloseButton.textContent = 'x';
+
+    errorContentBlock.appendChild(errorTitleBlock);
+    errorContentBlock.appendChild(errorMessageBlock);
+    errorContentBlock.appendChild(errorCloseButton);
+
+    fragment.appendChild(errorContentBlock);
+
+    document.querySelector('body').appendChild(fragment);
+
+    errorCloseButton.addEventListener('click', onErrorWindowClose);
+    errorCloseButton.addEventListener('keydown', onErrorWindowClose);
+
+    document.querySelector('.error-message').classList.remove('hidden');
+
+    errorCloseButton.focus();
+  };
+
   window.util = {
     isEnterEvent: isEnterEvent,
     isEscapeEvent: isEscapeEvent,
     getRandomValue: getRandomValue,
     getRandomItemFromArray: getRandomItemFromArray,
-    isLeftMouseButtonClick: isLeftMouseButtonClick
+    isLeftMouseButtonClick: isLeftMouseButtonClick,
+    showErrorMessage: showErrorMessage
   };
 })();

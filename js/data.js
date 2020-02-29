@@ -1,6 +1,10 @@
 'use strict';
 
 (function () {
+  var URL = 'https://js.dump.academy/keksobooking/data';
+  var StatusCode = {
+    OK: 200
+  };
   var ROOMS_GUESTS = {
     '1': {
       guests: ['1'],
@@ -44,6 +48,27 @@
     return {x: x, y: y};
   };
 
+  var load = function (onSuccess, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('load', function () {
+      if (xhr.status === StatusCode.OK) {
+        onSuccess(xhr.response);
+      } else {
+        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+      }
+    });
+    xhr.addEventListener('error', function () {
+      onError('Произошла ошибка соединения');
+    });
+    xhr.addEventListener('timeout', function () {
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
+    xhr.open('GET', URL);
+    xhr.send();
+  };
+
   var makeAdvert = function (idx) {
     var roomsCount = window.util.getRandomValue(1, 5);
     var location = new LocationCoordinate(600, 350);
@@ -78,6 +103,7 @@
     TYPES_TITLE: TYPES_TITLE,
     ROOMS_GUESTS: ROOMS_GUESTS,
     makeAdvert: makeAdvert,
-    LocationCoordinate: LocationCoordinate
+    LocationCoordinate: LocationCoordinate,
+    load: load
   };
 })();
