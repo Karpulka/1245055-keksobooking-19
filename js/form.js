@@ -138,6 +138,10 @@
     }
   };
 
+  var clearForm = function () {
+
+  };
+
   Array.from(adFormFields).forEach(function (fieldBlock) {
     var field = fieldBlock.querySelectorAll('input');
     field.forEach(function (element) {
@@ -155,6 +159,7 @@
   window.form = {
     toggleFormDisabled: toggleFormDisabled,
     setAddressFieldValue: setAddressFieldValue,
-    setValidateErrorsMessages: setValidateErrorsMessages
+    setValidateErrorsMessages: setValidateErrorsMessages,
+    clearForm: clearForm
   };
 })();
