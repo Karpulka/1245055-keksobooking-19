@@ -48,20 +48,18 @@
 
   var onSuccsess = function () {
     deactivatePage();
-    window.form.clearForm();
+    window.form.toggleFormDisabled();
   };
 
   var deactivatePage = function () {
-    window.form.toggleFormDisabled();
-    map.classList.add('map--faded');
-    adForm.classList.add('ad-form--disabled');
-
+    window.pin.removePins();
     mainPin.style.left = mainPinStartCoords.x;
     mainPin.style.top = mainPinStartCoords.y;
 
-    window.form.setAddressFieldValue(mainPin, true);
+    window.form.clearForm();
 
-    window.pin.removePins();
+    map.classList.add('map--faded');
+    adForm.classList.add('ad-form--disabled');
 
     mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
     mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
