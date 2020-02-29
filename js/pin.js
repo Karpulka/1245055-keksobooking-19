@@ -28,8 +28,8 @@
     var width = pin.offsetWidth;
     var afterHeight = isPageNoActive ? 0 : parseFloat(window.getComputedStyle(pin, ':after').height.split('px')[0]);
     var pinPosition = {
-      x: width / 2,
-      y: height / 2 + afterHeight
+      x: Math.ceil(width / 2),
+      y: Math.ceil(height / 2 + afterHeight)
     };
     return pinPosition;
   };
