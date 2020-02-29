@@ -61,6 +61,8 @@
 
     window.form.setAddressFieldValue(mainPin, true);
 
+    window.pin.removePins();
+
     mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
     mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
   };
