@@ -50,19 +50,9 @@
     return load.bind(null, method, url);
   };
 
-  var setFilter = function (data, count) {
-    var result = [];
-    if (data.length > 0) {
-      count = count ? count : data.length;
-      result = data.splice(count);
-    }
-    return result;
-  };
-
   window.data = {
     LocationCoordinate: LocationCoordinate,
     load: prefillRequest(Method.GET, RequestUrl.URL_LOAD),
-    send: prefillRequest(Method.POST, RequestUrl.URL_SEND),
-    setFilter: setFilter
+    send: prefillRequest(Method.POST, RequestUrl.URL_SEND)
   };
 })();

@@ -1,14 +1,12 @@
 'use strict';
 
 (function () {
-  var ADVERT_COUNT = 5;
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
   var mainPinStartCoords = {
     x: mainPin.style.left,
     y: mainPin.style.top
   };
-  var mapPinsList = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
   var mapFilter = document.querySelector('.map__filters');
   var mapFilterFields = mapFilter.children;
@@ -25,18 +23,8 @@
   };
 
   var onSuccessLoad = function (data) {
-    var adverts = window.data.setFilter(data, ADVERT_COUNT);
-    if (adverts.length > 0) {
-      var fragment = document.createDocumentFragment();
-      adverts.forEach(function (advert) {
-        if (advert.offer) {
-          var pin = window.pin.renderMapPin(advert);
-          fragment.appendChild(pin);
-          pin.addEventListener('click', window.pin.onPinClick.bind(null, advert));
-          pin.addEventListener('keydown', window.pin.onPinEnterPress.bind(null, advert));
-        }
-      });
-      mapPinsList.appendChild(fragment);
+    window.pin.renderPins(data);
+    if (data.length > 0) {
       window.form.toggleFormDisabled(mapFilterFields);
     }
   };
