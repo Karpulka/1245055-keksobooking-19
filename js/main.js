@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var ADVERT_COUNT = 5;
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
   var mainPinStartCoords = {
@@ -21,8 +22,8 @@
     }
   };
 
-  var onSuccess = function (data) {
-    var adverts = data;
+  var onSuccessLoad = function (data) {
+    var adverts = window.data.setFilter(data, ADVERT_COUNT);
     var fragment = document.createDocumentFragment();
     adverts.forEach(function (advert) {
       if (advert.offer) {
@@ -37,16 +38,16 @@
 
   var activatePageElements = function () {
     activatePage();
-    window.data.load(onSuccess, window.util.showErrorMessage);
+    window.data.load(onSuccessLoad, window.util.showErrorMessage);
     window.form.setValidateErrorsMessages();
   };
 
   var onFormSubmit = function (evt) {
     evt.preventDefault();
-    window.data.send(onSuccsess, window.util.showErrorMessage, new FormData(adForm));
+    window.data.send(onSuccessSend, window.util.showErrorMessage, new FormData(adForm));
   };
 
-  var onSuccsess = function () {
+  var onSuccessSend = function () {
     window.util.showSuccessMessage();
     deactivatePage();
     window.form.toggleFormDisabled();
