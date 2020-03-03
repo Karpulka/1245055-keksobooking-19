@@ -10,6 +10,8 @@
   };
   var mapPinsList = document.querySelector('.map__pins');
   var adForm = document.querySelector('.ad-form');
+  var mapFilter = document.querySelector('.map__filters');
+  var mapFilterFields = mapFilter.children;
 
   var activatePage = function () {
     if (map.classList.contains('map--faded')) {
@@ -24,16 +26,19 @@
 
   var onSuccessLoad = function (data) {
     var adverts = window.data.setFilter(data, ADVERT_COUNT);
-    var fragment = document.createDocumentFragment();
-    adverts.forEach(function (advert) {
-      if (advert.offer) {
-        var pin = window.pin.renderMapPin(advert);
-        fragment.appendChild(pin);
-        pin.addEventListener('click', window.pin.onPinClick.bind(null, advert));
-        pin.addEventListener('keydown', window.pin.onPinEnterPress.bind(null, advert));
-      }
-    });
-    mapPinsList.appendChild(fragment);
+    if (adverts.length > 0) {
+      var fragment = document.createDocumentFragment();
+      adverts.forEach(function (advert) {
+        if (advert.offer) {
+          var pin = window.pin.renderMapPin(advert);
+          fragment.appendChild(pin);
+          pin.addEventListener('click', window.pin.onPinClick.bind(null, advert));
+          pin.addEventListener('keydown', window.pin.onPinEnterPress.bind(null, advert));
+        }
+      });
+      mapPinsList.appendChild(fragment);
+      window.form.toggleFormDisabled(mapFilterFields);
+    }
   };
 
   var activatePageElements = function () {
@@ -51,6 +56,7 @@
     window.util.showSuccessMessage();
     deactivatePage();
     window.form.toggleFormDisabled();
+    window.form.toggleFormDisabled(mapFilterFields);
   };
 
   var deactivatePage = function () {
@@ -68,7 +74,8 @@
   };
 
   window.form.setAddressFieldValue(mainPin, true);
-  window.form.toggleFormDisabled(true);
+  window.form.toggleFormDisabled();
+  window.form.toggleFormDisabled(mapFilterFields);
 
   mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
   mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
