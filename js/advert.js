@@ -151,6 +151,7 @@
 
   window.advert = {
     renderMapCard: renderMapCard,
-    showAdvert: showAdvert
+    showAdvert: showAdvert,
+    removeCard: removeCard
   };
 })();

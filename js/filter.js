@@ -20,7 +20,7 @@
     return difference;
   };
 
-  var setFilter = function (data) {
+  var setFilter = function (data, count) {
     if (data.length > 0) {
       var filterValues = getFilterValues();
       if (filterValues.length > 0) {
@@ -28,7 +28,7 @@
         data.sort(sort);
       }
     }
-    return data;
+    return count ? data.slice(0, count) : data;
   };
 
   var getFilterValues = function () {
@@ -51,6 +51,7 @@
   };
 
   var onSuccess = function (data) {
+    window.advert.removeCard();
     window.pin.removePins();
     window.pin.renderPins(data);
   };

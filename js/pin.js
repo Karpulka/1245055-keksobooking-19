@@ -44,7 +44,7 @@
   };
 
   var renderPins = function (pins) {
-    var adverts = window.filter.setFilter(pins);
+    var adverts = window.filter.setFilter(pins, ADVERT_COUNT);
     if (adverts.length > 0) {
       var fragment = document.createDocumentFragment();
       adverts.forEach(function (advert) {
