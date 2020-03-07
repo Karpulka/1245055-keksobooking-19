@@ -10,6 +10,7 @@
     GET: 'GET',
     POST: 'POST'
   };
+
   var StatusCode = {
     OK: 200
   };

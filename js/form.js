@@ -72,8 +72,6 @@
   var adFormTypeField = adForm.querySelector('[name="type"]');
   var adFormTimeInField = adForm.querySelector('[name="timein"]');
   var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
-  var mapFilter = document.querySelector('.map__filters');
-  var mapFilterFields = mapFilter.children;
 
   var enable = function (element) {
     element.removeAttribute('disabled');
@@ -102,11 +100,12 @@
     setAddressFieldValue(mainPin, pageIsActive);
   };
 
-  var toggleFormDisabled = function () {
+  var toggleFormDisabled = function (form) {
+    form = form ? form : adFormFields;
     var formsElementsActivationToggle = function (list) {
       [].forEach.call(list, toggleDisabledElement);
     };
-    [adFormFields, mapFilterFields].forEach(function (item) {
+    [form].forEach(function (item) {
       formsElementsActivationToggle(item);
     });
   };
