@@ -83,9 +83,9 @@
     return filterValues;
   };
 
-  var onFilterChange = function () {
+  var onFilterChange = window.debounce(function () {
     window.data.load(onSuccess, window.util.showErrorMessage);
-  };
+  });
 
   var onSuccess = function (data) {
     window.advert.removeCard();
