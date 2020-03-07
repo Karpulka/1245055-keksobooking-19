@@ -4,31 +4,26 @@
   var mapFilter = document.querySelector('.map__filters');
   var mapFilterSelects = mapFilter.querySelectorAll('.map__filter');
 
-  var getRank = function (item, filterValues) {
-    var rank = 0;
+  var filterCallback = function (filterValues, item) {
+    var check = true;
     filterValues.forEach(function (parameter) {
-      rank = parameter.value === item.offer[parameter.name] ? rank + 1 : rank;
+      if (item.offer[parameter.name] !== parameter.value) {
+        check = false;
+      }
     });
-    return rank;
-  };
-
-  var sortData = function (data, filterValues, previos, current) {
-    var difference = getRank(current, filterValues) - getRank(previos, filterValues);
-    if (difference === 0) {
-      difference = data.indexOf(previos) - data.indexOf(current);
-    }
-    return difference;
+    return check;
   };
 
   var setFilter = function (data, count) {
+    var resultData = data;
     if (data.length > 0) {
       var filterValues = getFilterValues();
       if (filterValues.length > 0) {
-        var sort = sortData.bind(null, data, filterValues);
-        data.sort(sort);
+        var checkParameters = filterCallback.bind(null, filterValues);
+        resultData = data.filter(checkParameters);
       }
     }
-    return count ? data.slice(0, count) : data;
+    return count ? resultData.slice(0, count) : resultData;
   };
 
   var getFilterValues = function () {
