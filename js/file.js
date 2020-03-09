@@ -6,9 +6,9 @@
 
   var defaultPhotoContainer = document.querySelector('.ad-form__photo');
 
-  var onFileChange = function (previewElm, createElement, evt) {
-    var currentElm = evt.currentTarget;
-    var file = currentElm.files[0];
+  var onFileChange = function (previewElement, createElement, evt) {
+    var currentElement = evt.currentTarget;
+    var file = currentElement.files[0];
     var fileName = file.name.toLowerCase();
 
     var matches = FILE_TYPES.some(function (it) {
@@ -20,9 +20,9 @@
 
       reader.addEventListener('load', function () {
         if (createElement) {
-          renderPhotoElm(previewElm, reader.result, fileName);
+          renderPhotoElement(previewElement, reader.result, fileName);
         } else {
-          previewElm.src = reader.result;
+          previewElement.src = reader.result;
         }
       });
 
@@ -32,9 +32,9 @@
     }
   };
 
-  var renderPhotoElm = function (photoContainer, fileSrc, fileName) {
+  var renderPhotoElement = function (photoContainer, fileSrc, fileName) {
     if (fileSrc) {
-      removePhoto();
+      remove();
 
       var fragment = document.createDocumentFragment();
       var img = document.createElement('img');
@@ -46,7 +46,7 @@
     }
   };
 
-  var removePhoto = function () {
+  var remove = function () {
     var currentPhoto = defaultPhotoContainer.querySelector('img');
 
     if (currentPhoto) {
@@ -56,6 +56,6 @@
 
   window.file = {
     onFileChange: onFileChange,
-    removePhoto: removePhoto
+    remove: remove
   };
 })();

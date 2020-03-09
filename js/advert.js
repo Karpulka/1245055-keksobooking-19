@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var TYPES_TITLE = {
+  var TypeTitle = {
     palace: 'Дворец',
     flat: 'Квартира',
     house: 'Дом',
@@ -95,7 +95,7 @@
     return result;
   };
 
-  var renderMapCard = function (advert) {
+  var render = function (advert) {
     var cardElement = mapCardTemplate.cloneNode(true);
     var photosBlock = cardElement.querySelector('.popup__photos');
     var renderElement = renderCardElement.bind(null, cardElement);
@@ -108,7 +108,7 @@
       'title': offer.title,
       'text--address': offer.address,
       'text--price': price,
-      'type': TYPES_TITLE[offer.type],
+      'type': TypeTitle[offer.type],
       'text--capacity': getInfoString(capacity),
       'text--time': getInfoString(time, stringTemplates.time.delimeter),
       'description': offer.description
@@ -119,9 +119,9 @@
     return cardElement;
   };
 
-  var showAdvert = function (advert) {
-    removeCard();
-    var newCard = window.advert.renderMapCard(advert);
+  var show = function (advert) {
+    remove();
+    var newCard = window.advert.render(advert);
     var buttonCloseCard = newCard.querySelector('.popup__close');
     buttonCloseCard.addEventListener('click', onAdvertCardCloseClick);
     buttonCloseCard.addEventListener('keydown', onAdvertCardCloseEnterPress);
@@ -130,19 +130,19 @@
   };
 
   var onAdvertCardCloseEnterPress = function (evt) {
-    window.util.isEnterEvent(evt, removeCard);
+    window.util.isEnterEvent(evt, remove);
   };
 
   var onAdvertCardCloseClick = function () {
-    removeCard();
+    remove();
   };
 
   var onAdvertCardCloseEscape = function (evt) {
-    window.util.isEscapeEvent(evt, removeCard);
+    window.util.isEscapeEvent(evt, remove);
     document.removeEventListener('keydown', onAdvertCardCloseEscape);
   };
 
-  var removeCard = function () {
+  var remove = function () {
     var card = map.querySelector('.map__card');
     if (card) {
       card.remove();
@@ -150,8 +150,8 @@
   };
 
   window.advert = {
-    renderMapCard: renderMapCard,
-    showAdvert: showAdvert,
-    removeCard: removeCard
+    render: render,
+    show: show,
+    remove: remove
   };
 })();

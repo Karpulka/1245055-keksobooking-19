@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var ROOMS_GUESTS = {
+  var roomGuest = {
     '1': {
       guests: ['1'],
       errorMessage: '1 комната — «для 1 гостя»'
@@ -105,7 +105,7 @@
     setAddressFieldValue(mainPin, pageIsActive);
   };
 
-  var toggleFormDisabled = function (form) {
+  var toggleDisabled = function (form) {
     form = form ? form : adFormFields;
     var formsElementsActivationToggle = function (list) {
       [].forEach.call(list, toggleDisabledElement);
@@ -118,7 +118,7 @@
   var setAddressFieldValue = function (pin, isPageNoActive) {
     var left = parseFloat(pin.style.left.split('px')[0]);
     var top = parseFloat(pin.style.top.split('px')[0]);
-    var pinPosition = window.pin.getPinPosition(pin, isPageNoActive);
+    var pinPosition = window.pin.getPosition(pin, isPageNoActive);
     var coordinates = new window.data.LocationCoordinate(left, top, pinPosition.x, pinPosition.y);
     adFormAddressField.setAttribute('value', coordinates.x + ', ' + coordinates.y);
   };
@@ -126,7 +126,7 @@
   var setValidateErrorsMessages = function () {
     var roomNumberValue = adForm.querySelector('[name="rooms"]').value.toString();
     var capacity = adForm.querySelector('[name="capacity"]');
-    var errorMessage = ROOMS_GUESTS[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : ROOMS_GUESTS[roomNumberValue].errorMessage;
+    var errorMessage = roomGuest[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : roomGuest[roomNumberValue].errorMessage;
     capacity.setCustomValidity(errorMessage);
   };
 
@@ -157,7 +157,7 @@
     }
   };
 
-  var clearForm = function () {
+  var clear = function () {
     adForm.reset();
     adFormAvatarPreview.src = adFormDefaultAvatarPreviewSrc;
   };
@@ -180,9 +180,9 @@
   adFormPhotoChooser.addEventListener('change', window.file.onFileChange.bind(null, adFormPhotoContainer, true));
 
   window.form = {
-    toggleFormDisabled: toggleFormDisabled,
+    toggleDisabled: toggleDisabled,
     setAddressFieldValue: setAddressFieldValue,
     setValidateErrorsMessages: setValidateErrorsMessages,
-    clearForm: clearForm
+    clear: clear
   };
 })();

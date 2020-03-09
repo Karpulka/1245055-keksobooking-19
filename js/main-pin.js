@@ -3,7 +3,7 @@
 (function () {
   var map = document.querySelector('.map');
   var mainPin = map.querySelector('.map__pin--main');
-  var mainPinPosition = window.pin.getPinPosition(mainPin);
+  var mainPinPosition = window.pin.getPosition(mainPin);
   var rangeY = {
     min: 130 - mainPinPosition.y,
     max: 630 - mainPinPosition.y
