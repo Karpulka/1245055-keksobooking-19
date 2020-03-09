@@ -74,6 +74,7 @@
   var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
   var adFormAvatarChooser = adForm.querySelector('[name="avatar"]');
   var adFormAvatarPreview = adForm.querySelector('.ad-form-header__preview img');
+  var adFormDefaultAvatarPreviewSrc = adFormAvatarPreview.src;
   var adFormPhotoChooser = adForm.querySelector('[name="images"]');
   var adFormPhotoContainer = adForm.querySelector('.ad-form__photo');
 
@@ -158,6 +159,7 @@
 
   var clearForm = function () {
     adForm.reset();
+    adFormAvatarPreview.src = adFormDefaultAvatarPreviewSrc;
   };
 
   Array.from(adFormFields).forEach(function (fieldBlock) {

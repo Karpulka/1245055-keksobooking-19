@@ -60,6 +60,7 @@
 
     window.pin.removePins();
     window.advert.removeCard();
+    window.file.removePhoto();
 
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
