@@ -10,6 +10,7 @@
   var adForm = document.querySelector('.ad-form');
   var mapFilter = document.querySelector('.map__filters');
   var mapFilterFields = mapFilter.children;
+  var resetButton = adForm.querySelector('[type="reset"]');
 
   var activatePage = function () {
     if (map.classList.contains('map--faded')) {
@@ -47,15 +48,24 @@
     window.form.toggleFormDisabled(mapFilterFields);
   };
 
+  var onButtonResetClick = function () {
+    deactivatePage();
+    window.form.toggleFormDisabled();
+    window.form.toggleFormDisabled(mapFilterFields);
+  };
+
   var deactivatePage = function () {
-    window.pin.removePins();
     mainPin.style.left = mainPinStartCoords.x;
     mainPin.style.top = mainPinStartCoords.y;
+
+    window.pin.removePins();
+    window.advert.removeCard();
 
     map.classList.add('map--faded');
     adForm.classList.add('ad-form--disabled');
 
     window.form.clearForm();
+    mapFilter.reset();
 
     mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
     mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
@@ -69,4 +79,5 @@
   mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
 
   adForm.addEventListener('submit', onFormSubmit);
+  resetButton.addEventListener('click', onButtonResetClick);
 })();

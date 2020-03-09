@@ -72,6 +72,10 @@
   var adFormTypeField = adForm.querySelector('[name="type"]');
   var adFormTimeInField = adForm.querySelector('[name="timein"]');
   var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
+  var adFormAvatarChooser = adForm.querySelector('[name="avatar"]');
+  var adFormAvatarPreview = adForm.querySelector('.ad-form-header__preview img');
+  var adFormPhotoChooser = adForm.querySelector('[name="images"]');
+  var adFormPhotoContainer = adForm.querySelector('.ad-form__photo');
 
   var enable = function (element) {
     element.removeAttribute('disabled');
@@ -169,6 +173,9 @@
   adFormTypeField.addEventListener('change', setMinPrice);
   adFormTimeInField.addEventListener('change', setTimeInOutValue);
   adFormTimeOutField.addEventListener('change', setTimeInOutValue);
+
+  adFormAvatarChooser.addEventListener('change', window.file.onFileChange.bind(null, adFormAvatarPreview, false));
+  adFormPhotoChooser.addEventListener('change', window.file.onFileChange.bind(null, adFormPhotoContainer, true));
 
   window.form = {
     toggleFormDisabled: toggleFormDisabled,
