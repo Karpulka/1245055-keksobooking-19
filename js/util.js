@@ -52,10 +52,14 @@
     }
   };
 
-  var showErrorMessage = function () {
+  var showErrorMessage = function (message) {
     var fragment = document.createDocumentFragment();
     var errorBlock = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
     var errorCloseButton = errorBlock.querySelector('.error__button');
+
+    if (message) {
+      errorBlock.querySelector('.error__message').textContent = message;
+    }
 
     fragment.appendChild(errorBlock);
     document.querySelector('body').appendChild(errorBlock);

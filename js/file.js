@@ -1,7 +1,8 @@
 'use strict';
 
 (function () {
-  var FILE_TYPES = ['jpg', 'jpeg', 'png'];
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var FILE_ERROR_MESSAGE = 'Для загрузки доступны только файлы формата .gif, .jpg, .jpeg, .png';
 
   var onFileChange = function (previewElm, createElement, evt) {
     var currentElm = evt.currentTarget;
@@ -24,6 +25,8 @@
       });
 
       reader.readAsDataURL(file);
+    } else {
+      window.util.showErrorMessage(FILE_ERROR_MESSAGE);
     }
   };
 
