@@ -105,6 +105,10 @@
 
   setChangeListener([mapFilterSelects, mapFilterFeatures]);
 
+  mapFilterFeatures.forEach(function (feature) {
+    feature.addEventListener('keydown', window.form.onFeatureEnterPress);
+  });
+
   window.filter = {
     set: set
   };

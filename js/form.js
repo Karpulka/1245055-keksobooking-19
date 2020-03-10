@@ -77,6 +77,7 @@
   var adFormDefaultAvatarPreviewSrc = adFormAvatarPreview.src;
   var adFormPhotoChooser = adForm.querySelector('[name="images"]');
   var adFormPhotoContainer = adForm.querySelector('.ad-form__photo');
+  var adFormFeatures = adForm.querySelectorAll('[name="features"]');
 
   var enable = function (element) {
     element.removeAttribute('disabled');
@@ -162,11 +163,24 @@
     adFormAvatarPreview.src = adFormDefaultAvatarPreviewSrc;
   };
 
+  var toggleFeature = function (feature, evt) {
+    evt.preventDefault();
+    feature.click();
+  };
+
+  var onFeatureEnterPress = function (evt) {
+    window.util.isEnterEvent(evt, toggleFeature.bind(null, evt.target, evt));
+  };
+
   Array.from(adFormFields).forEach(function (fieldBlock) {
     var field = fieldBlock.querySelectorAll('input');
     field.forEach(function (element) {
       element.addEventListener('invalid', setValidityMessage);
     });
+  });
+
+  adFormFeatures.forEach(function (feature) {
+    feature.addEventListener('keydown', onFeatureEnterPress);
   });
 
   adForm.querySelector('[name="capacity"]').addEventListener('change', setValidateErrorsMessages);
@@ -183,6 +197,7 @@
     toggleDisabled: toggleDisabled,
     setAddressFieldValue: setAddressFieldValue,
     setValidateErrorsMessages: setValidateErrorsMessages,
-    clear: clear
+    clear: clear,
+    onFeatureEnterPress: onFeatureEnterPress
   };
 })();
