@@ -38,6 +38,7 @@
 
   var onFormSubmit = function (evt) {
     evt.preventDefault();
+    window.util.setPreloader();
     window.data.send(onSuccessSend, window.util.showErrorMessage, new FormData(adForm));
   };
 
