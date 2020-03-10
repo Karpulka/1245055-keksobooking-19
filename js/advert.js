@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  // Б8: Названия надо большими, ибо это ENUM
   var TypeTitle = {
     palace: 'Дворец',
     flat: 'Квартира',

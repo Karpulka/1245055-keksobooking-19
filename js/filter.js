@@ -2,11 +2,12 @@
 
 (function () {
   var BASE = 10;
+  // Б8: Названия заглавными
   var Prices = {
     middle: [10000, 50000],
     low: [0, 10000],
     high: [50000, +Infinity]
-  };
+  }; 
   var mapFilter = document.querySelector('.map__filters');
   var mapFilterSelects = mapFilter.querySelectorAll('.map__filter');
   var mapFilterFeatures = mapFilter.querySelectorAll('.map__checkbox');
@@ -31,6 +32,7 @@
     return check;
   };
 
+  // Д6: setSomething?
   var set = function (data, count) {
     var resultData = data;
     if (data.length > 0) {
