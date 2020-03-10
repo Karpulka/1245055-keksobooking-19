@@ -3,9 +3,9 @@
 (function () {
   var BASE = 10;
   var Prices = {
-    middle: [10000, 50000],
-    low: [0, 10000],
-    high: [50000, +Infinity]
+    MIDDLE: [10000, 50000],
+    LOW: [0, 10000],
+    HIGH: [50000, +Infinity]
   };
   var mapFilter = document.querySelector('.map__filters');
   var mapFilterSelects = mapFilter.querySelectorAll('.map__filter');
@@ -56,7 +56,7 @@
             value = parseInt(value, BASE);
             break;
           case 'price':
-            value = Prices[value];
+            value = Prices[value.toUpperCase()];
             break;
           default:
             value = value;

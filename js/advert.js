@@ -2,10 +2,10 @@
 
 (function () {
   var TypeTitle = {
-    palace: 'Дворец',
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало'
+    PALACE: 'Дворец',
+    FLAT: 'Квартира',
+    HOUSE: 'Дом',
+    BUNGALO: 'Бунгало'
   };
 
   var stringTemplates = {
@@ -108,7 +108,7 @@
       'title': offer.title,
       'text--address': offer.address,
       'text--price': price,
-      'type': TypeTitle[offer.type],
+      'type': TypeTitle[offer.type.toUpperCase()],
       'text--capacity': getInfoString(capacity),
       'text--time': getInfoString(time, stringTemplates.time.delimeter),
       'description': offer.description
