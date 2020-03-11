@@ -89,6 +89,7 @@
   mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
 
   adForm.addEventListener('submit', onFormSubmit);
+
   resetButton.addEventListener('click', onButtonResetClick);
   resetButton.addEventListener('click', onButtonResetKeyPress);
 })();
