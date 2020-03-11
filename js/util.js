@@ -33,6 +33,24 @@
     return array[Math.floor(Math.random() * (max - min)) + min];
   };
 
+  var setPreloader = function () {
+    var img = document.querySelector('.map__pin--main > img').cloneNode();
+    var adForm = document.querySelector('.ad-form');
+    adForm.classList.add('ad-form--disabled');
+    adForm.querySelector('[type="submit"]').setAttribute('disabled', 'disabled');
+    img.classList.add('preloader');
+    img.setAttribute('width', '80');
+    img.setAttribute('height', '88');
+    adForm.after(img);
+  };
+
+  var removePreloader = function () {
+    var adForm = document.querySelector('.ad-form');
+    adForm.classList.remove('ad-form--disabled');
+    adForm.querySelector('[type="submit"]').removeAttribute('disabled');
+    document.querySelector('.preloader').remove();
+  };
+
   var onErrorWindowClose = function (evt) {
     if (evt.type === 'click' || evt.key === KEY_ENTER || evt.key === KEY_ESCAPE) {
       document.querySelector('.error').remove();
@@ -64,6 +82,8 @@
     fragment.appendChild(errorBlock);
     document.querySelector('body').appendChild(errorBlock);
 
+    removePreloader();
+
     document.addEventListener('click', onErrorWindowClose);
     errorCloseButton.addEventListener('keydown', onErrorWindowClose);
 
@@ -77,6 +97,8 @@
     fragment.appendChild(successBlock);
     document.querySelector('body').appendChild(successBlock);
 
+    removePreloader();
+
     document.addEventListener('click', onSuccessWindowClose);
     document.addEventListener('keydown', onSuccessWindowClose);
   };
@@ -88,6 +110,7 @@
     getRandomItemFromArray: getRandomItemFromArray,
     isLeftMouseButtonClick: isLeftMouseButtonClick,
     showErrorMessage: showErrorMessage,
-    showSuccessMessage: showSuccessMessage
+    showSuccessMessage: showSuccessMessage,
+    setPreloader: setPreloader
   };
 })();

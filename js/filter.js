@@ -3,9 +3,9 @@
 (function () {
   var BASE = 10;
   var Prices = {
-    'middle': [10000, 50000],
-    'low': [0, 10000],
-    'high': [50000, +Infinity]
+    MIDDLE: [10000, 50000],
+    LOW: [0, 10000],
+    HIGH: [50000, +Infinity]
   };
   var mapFilter = document.querySelector('.map__filters');
   var mapFilterSelects = mapFilter.querySelectorAll('.map__filter');
@@ -31,7 +31,7 @@
     return check;
   };
 
-  var setFilter = function (data, count) {
+  var set = function (data, count) {
     var resultData = data;
     if (data.length > 0) {
       var filterValues = getFilterValues();
@@ -56,7 +56,7 @@
             value = parseInt(value, BASE);
             break;
           case 'price':
-            value = Prices[value];
+            value = Prices[value.toUpperCase()];
             break;
           default:
             value = value;
@@ -88,12 +88,12 @@
   });
 
   var onSuccess = function (data) {
-    window.advert.removeCard();
-    window.pin.removePins();
-    window.pin.renderPins(data);
+    window.advert.remove();
+    window.pin.remove();
+    window.pin.render(data);
   };
 
-  var setFilterChangeListener = function (filterFields) {
+  var setChangeListener = function (filterFields) {
     if (filterFields.length > 0) {
       filterFields.forEach(function (filters) {
         filters.forEach(function (filter) {
@@ -103,9 +103,13 @@
     }
   };
 
-  setFilterChangeListener([mapFilterSelects, mapFilterFeatures]);
+  setChangeListener([mapFilterSelects, mapFilterFeatures]);
+
+  mapFilterFeatures.forEach(function (feature) {
+    feature.addEventListener('keydown', window.form.onFeatureEnterPress);
+  });
 
   window.filter = {
-    setFilter: setFilter
+    set: set
   };
 })();

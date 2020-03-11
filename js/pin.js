@@ -18,14 +18,14 @@
   };
 
   var onPinClick = function (advert) {
-    window.advert.showAdvert(advert);
+    window.advert.show(advert);
   };
 
-  var onPinEnterPress = function (advert, evt) {
-    window.util.isEnterEvent(evt, window.advert.showAdvert.bind(null, advert));
+  var onEnterPress = function (advert, evt) {
+    window.util.isEnterEvent(evt, window.advert.show.bind(null, advert));
   };
 
-  var getPinPosition = function (pin, isPageNoActive) {
+  var getPosition = function (pin, isPageNoActive) {
     var height = pin.offsetHeight;
     var width = pin.offsetWidth;
     var afterHeight = isPageNoActive ? 0 : parseFloat(window.getComputedStyle(pin, ':after').height.split('px')[0]);
@@ -36,23 +36,23 @@
     return pinPosition;
   };
 
-  var removePins = function () {
+  var remove = function () {
     var pinsList = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     pinsList.forEach(function (pin) {
       pin.remove();
     });
   };
 
-  var renderPins = function (pins) {
-    var adverts = window.filter.setFilter(pins, ADVERT_COUNT);
+  var render = function (pins) {
+    var adverts = window.filter.set(pins, ADVERT_COUNT);
     if (adverts.length > 0) {
       var fragment = document.createDocumentFragment();
       adverts.forEach(function (advert) {
         if (advert.offer) {
-          var pin = window.pin.renderMapPin(advert);
+          var pin = renderMapPin(advert);
           fragment.appendChild(pin);
           pin.addEventListener('click', window.pin.onPinClick.bind(null, advert));
-          pin.addEventListener('keydown', window.pin.onPinEnterPress.bind(null, advert));
+          pin.addEventListener('keydown', window.pin.onEnterPress.bind(null, advert));
         }
       });
       mapPinsList.appendChild(fragment);
@@ -60,11 +60,10 @@
   };
 
   window.pin = {
-    renderMapPin: renderMapPin,
     onPinClick: onPinClick,
-    onPinEnterPress: onPinEnterPress,
-    getPinPosition: getPinPosition,
-    removePins: removePins,
-    renderPins: renderPins
+    onEnterPress: onEnterPress,
+    getPosition: getPosition,
+    remove: remove,
+    render: render
   };
 })();

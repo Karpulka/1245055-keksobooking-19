@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var ROOMS_GUESTS = {
+  var roomGuest = {
     '1': {
       guests: ['1'],
       errorMessage: '1 комната — «для 1 гостя»'
@@ -74,8 +74,10 @@
   var adFormTimeOutField = adForm.querySelector('[name="timeout"]');
   var adFormAvatarChooser = adForm.querySelector('[name="avatar"]');
   var adFormAvatarPreview = adForm.querySelector('.ad-form-header__preview img');
+  var adFormDefaultAvatarPreviewSrc = adFormAvatarPreview.src;
   var adFormPhotoChooser = adForm.querySelector('[name="images"]');
   var adFormPhotoContainer = adForm.querySelector('.ad-form__photo');
+  var adFormFeatures = adForm.querySelectorAll('[name="features"]');
 
   var enable = function (element) {
     element.removeAttribute('disabled');
@@ -104,7 +106,7 @@
     setAddressFieldValue(mainPin, pageIsActive);
   };
 
-  var toggleFormDisabled = function (form) {
+  var toggleDisabled = function (form) {
     form = form ? form : adFormFields;
     var formsElementsActivationToggle = function (list) {
       [].forEach.call(list, toggleDisabledElement);
@@ -117,7 +119,7 @@
   var setAddressFieldValue = function (pin, isPageNoActive) {
     var left = parseFloat(pin.style.left.split('px')[0]);
     var top = parseFloat(pin.style.top.split('px')[0]);
-    var pinPosition = window.pin.getPinPosition(pin, isPageNoActive);
+    var pinPosition = window.pin.getPosition(pin, isPageNoActive);
     var coordinates = new window.data.LocationCoordinate(left, top, pinPosition.x, pinPosition.y);
     adFormAddressField.setAttribute('value', coordinates.x + ', ' + coordinates.y);
   };
@@ -125,7 +127,7 @@
   var setValidateErrorsMessages = function () {
     var roomNumberValue = adForm.querySelector('[name="rooms"]').value.toString();
     var capacity = adForm.querySelector('[name="capacity"]');
-    var errorMessage = ROOMS_GUESTS[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : ROOMS_GUESTS[roomNumberValue].errorMessage;
+    var errorMessage = roomGuest[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : roomGuest[roomNumberValue].errorMessage;
     capacity.setCustomValidity(errorMessage);
   };
 
@@ -156,8 +158,18 @@
     }
   };
 
-  var clearForm = function () {
+  var clear = function () {
     adForm.reset();
+    adFormAvatarPreview.src = adFormDefaultAvatarPreviewSrc;
+  };
+
+  var toggleFeature = function (feature, evt) {
+    evt.preventDefault();
+    feature.click();
+  };
+
+  var onFeatureEnterPress = function (evt) {
+    window.util.isEnterEvent(evt, toggleFeature.bind(null, evt.target, evt));
   };
 
   Array.from(adFormFields).forEach(function (fieldBlock) {
@@ -165,6 +177,10 @@
     field.forEach(function (element) {
       element.addEventListener('invalid', setValidityMessage);
     });
+  });
+
+  adFormFeatures.forEach(function (feature) {
+    feature.addEventListener('keydown', onFeatureEnterPress);
   });
 
   adForm.querySelector('[name="capacity"]').addEventListener('change', setValidateErrorsMessages);
@@ -178,9 +194,10 @@
   adFormPhotoChooser.addEventListener('change', window.file.onFileChange.bind(null, adFormPhotoContainer, true));
 
   window.form = {
-    toggleFormDisabled: toggleFormDisabled,
+    toggleDisabled: toggleDisabled,
     setAddressFieldValue: setAddressFieldValue,
     setValidateErrorsMessages: setValidateErrorsMessages,
-    clearForm: clearForm
+    clear: clear,
+    onFeatureEnterPress: onFeatureEnterPress
   };
 })();
