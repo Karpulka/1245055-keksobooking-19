@@ -2,6 +2,10 @@
 
 (function () {
   var ADVERT_COUNT = 5;
+  var Pin = {
+    HEIGHT: 70,
+    WIDTH: 50
+  };
   var mapPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var mapPinsList = document.querySelector('.map__pins');
 
@@ -10,8 +14,8 @@
     var pin = advertElement.querySelector('img');
     var locationX = advert.location.x;
     var locationY = advert.location.y;
-    advertElement.style.left = locationX + 'px';
-    advertElement.style.top = locationY + 'px';
+    advertElement.style.left = locationX - (Pin.WIDTH / 2) + 'px';
+    advertElement.style.top = locationY - Pin.HEIGHT + 'px';
     pin.src = advert.author.avatar;
     pin.alt = advert.offer.title;
     return advertElement;
