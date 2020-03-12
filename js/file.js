@@ -6,7 +6,7 @@
 
   var defaultPhotoContainer = document.querySelector('.ad-form__photo');
 
-  var onFileChange = function (previewElement, createElement, evt) {
+  var onValueChange = function (previewElement, createElement, evt) {
     var currentElement = evt.currentTarget;
     var file = currentElement.files[0];
     var fileName = file.name.toLowerCase();
@@ -55,7 +55,7 @@
   };
 
   window.file = {
-    onFileChange: onFileChange,
+    onValueChange: onValueChange,
     remove: remove
   };
 })();

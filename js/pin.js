@@ -21,7 +21,7 @@
     return advertElement;
   };
 
-  var onPinClick = function (advert) {
+  var onMouseClick = function (advert) {
     window.advert.show(advert);
   };
 
@@ -41,8 +41,8 @@
   };
 
   var remove = function () {
-    var pinsList = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    pinsList.forEach(function (pin) {
+    var pins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pins.forEach(function (pin) {
       pin.remove();
     });
   };
@@ -55,7 +55,7 @@
         if (advert.offer) {
           var pin = renderMapPin(advert);
           fragment.appendChild(pin);
-          pin.addEventListener('click', window.pin.onPinClick.bind(null, advert));
+          pin.addEventListener('click', window.pin.onMouseClick.bind(null, advert));
           pin.addEventListener('keydown', window.pin.onEnterPress.bind(null, advert));
         }
       });
@@ -64,7 +64,7 @@
   };
 
   window.pin = {
-    onPinClick: onPinClick,
+    onMouseClick: onMouseClick,
     onEnterPress: onEnterPress,
     getPosition: getPosition,
     remove: remove,

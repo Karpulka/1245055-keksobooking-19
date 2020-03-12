@@ -12,23 +12,23 @@
   var mapFilterFeatures = mapFilter.querySelectorAll('.map__checkbox');
 
   var filterCallback = function (filterValues, item) {
-    var check = true;
+    var checks = [];
 
     filterValues.forEach(function (parameter) {
       var dataValue = item.offer[parameter.name];
 
       if (parameter.name === 'price') {
-        check = dataValue >= parameter.value[0] && dataValue < parameter.value[1];
+        checks.push(dataValue >= parameter.value[0] && dataValue < parameter.value[1]);
       } else if (parameter.name === 'features') {
-        check = check && parameter.value.every(function (feature) {
+        checks.push(parameter.value.every(function (feature) {
           return item.offer.features.indexOf(feature) > -1;
-        });
+        }));
       } else {
-        check = dataValue === parameter.value;
+        checks.push(dataValue === parameter.value);
       }
     });
 
-    return check;
+    return checks.indexOf(false) > -1 ? false : true;
   };
 
   var set = function (data, count) {

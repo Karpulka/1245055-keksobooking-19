@@ -13,11 +13,11 @@
     max: map.clientWidth - mainPinPosition.x
   };
 
-  var onMainPinClick = function (action, evt) {
+  var onMouseClick = function (action, evt) {
     window.util.isLeftMouseButtonClick(evt, action);
   };
 
-  var onMainPinEnterPress = function (action, evt) {
+  var onEnterPress = function (action, evt) {
     window.util.isEnterEvent(evt, action);
   };
 
@@ -57,7 +57,7 @@
   mainPin.addEventListener('mousedown', onMaiPinMouseDown);
 
   window.mainPin = {
-    onMainPinClick: onMainPinClick,
-    onMainPinEnterPress: onMainPinEnterPress
+    onMouseClick: onMouseClick,
+    onEnterPress: onEnterPress
   };
 })();

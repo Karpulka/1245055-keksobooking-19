@@ -18,8 +18,8 @@
       map.classList.remove('map--faded');
       adForm.classList.remove('ad-form--disabled');
       window.form.setAddressFieldValue(mainPin);
-      document.removeEventListener('mousedown', window.mainPin.onMainPinClick);
-      document.removeEventListener('keydown', window.mainPin.onMainPinEnterPress);
+      document.removeEventListener('mousedown', window.mainPin.onMouseClick);
+      document.removeEventListener('keydown', window.mainPin.onEnterPress);
     }
   };
 
@@ -33,7 +33,7 @@
   var activatePageElements = function () {
     activatePage();
     window.data.load(onSuccessLoad, window.util.showErrorMessage);
-    window.form.setValidateErrorsMessages();
+    window.form.onFieldChangeErrorMessage();
   };
 
   var onFormSubmit = function (evt) {
@@ -77,16 +77,16 @@
     window.form.clear();
     mapFilter.reset();
 
-    mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
-    mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
+    mainPin.addEventListener('mousedown', window.mainPin.onMouseClick.bind(null, activatePageElements), {once: true});
+    mainPin.addEventListener('keydown', window.mainPin.onEnterPress.bind(null, activatePageElements), {once: true});
   };
 
   window.form.setAddressFieldValue(mainPin, true);
   window.form.toggleDisabled();
   window.form.toggleDisabled(mapFilterFields);
 
-  mainPin.addEventListener('mousedown', window.mainPin.onMainPinClick.bind(null, activatePageElements), {once: true});
-  mainPin.addEventListener('keydown', window.mainPin.onMainPinEnterPress.bind(null, activatePageElements), {once: true});
+  mainPin.addEventListener('mousedown', window.mainPin.onMouseClick.bind(null, activatePageElements), {once: true});
+  mainPin.addEventListener('keydown', window.mainPin.onEnterPress.bind(null, activatePageElements), {once: true});
 
   adForm.addEventListener('submit', onFormSubmit);
 

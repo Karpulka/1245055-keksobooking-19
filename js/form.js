@@ -124,14 +124,14 @@
     adFormAddressField.setAttribute('value', coordinates.x + ', ' + coordinates.y);
   };
 
-  var setValidateErrorsMessages = function () {
+  var onFieldChangeErrorMessage = function () {
     var roomNumberValue = adForm.querySelector('[name="rooms"]').value.toString();
     var capacity = adForm.querySelector('[name="capacity"]');
     var errorMessage = roomGuest[roomNumberValue].guests.indexOf(capacity.value) > -1 ? '' : roomGuest[roomNumberValue].errorMessage;
     capacity.setCustomValidity(errorMessage);
   };
 
-  var setValidityMessage = function (evt) {
+  var onFieldSetValidityMessage = function (evt) {
     var element = evt.target;
     for (var i = 0; i < validationMessages.length; i++) {
       var item = validationMessages[i];
@@ -143,13 +143,13 @@
     }
   };
 
-  var setMinPrice = function (evt) {
+  var onFieldPriceChangeMin = function (evt) {
     var minPrice = minPrices[evt.target.value];
     adFormPriceField.setAttribute('min', parseInt(minPrice.replace(' ', ''), 10));
     adFormPriceField.setAttribute('placeholder', minPrice);
   };
 
-  var setTimeInOutValue = function (evt) {
+  var onFieldTimeChange = function (evt) {
     var value = evt.target.value;
     if (evt.target.getAttribute('name') === 'timein') {
       adFormTimeOutField.value = value;
@@ -173,9 +173,9 @@
   };
 
   Array.from(adFormFields).forEach(function (fieldBlock) {
-    var field = fieldBlock.querySelectorAll('input');
-    field.forEach(function (element) {
-      element.addEventListener('invalid', setValidityMessage);
+    var fields = fieldBlock.querySelectorAll('input');
+    fields.forEach(function (element) {
+      element.addEventListener('invalid', onFieldSetValidityMessage);
     });
   });
 
@@ -183,20 +183,20 @@
     feature.addEventListener('keydown', onFeatureEnterPress);
   });
 
-  adForm.querySelector('[name="capacity"]').addEventListener('change', setValidateErrorsMessages);
-  adForm.querySelector('[name="rooms"]').addEventListener('change', setValidateErrorsMessages);
+  adForm.querySelector('[name="capacity"]').addEventListener('change', onFieldChangeErrorMessage);
+  adForm.querySelector('[name="rooms"]').addEventListener('change', onFieldChangeErrorMessage);
 
-  adFormTypeField.addEventListener('change', setMinPrice);
-  adFormTimeInField.addEventListener('change', setTimeInOutValue);
-  adFormTimeOutField.addEventListener('change', setTimeInOutValue);
+  adFormTypeField.addEventListener('change', onFieldPriceChangeMin);
+  adFormTimeInField.addEventListener('change', onFieldTimeChange);
+  adFormTimeOutField.addEventListener('change', onFieldTimeChange);
 
-  adFormAvatarChooser.addEventListener('change', window.file.onFileChange.bind(null, adFormAvatarPreview, false));
-  adFormPhotoChooser.addEventListener('change', window.file.onFileChange.bind(null, adFormPhotoContainer, true));
+  adFormAvatarChooser.addEventListener('change', window.file.onValueChange.bind(null, adFormAvatarPreview, false));
+  adFormPhotoChooser.addEventListener('change', window.file.onValueChange.bind(null, adFormPhotoContainer, true));
 
   window.form = {
     toggleDisabled: toggleDisabled,
     setAddressFieldValue: setAddressFieldValue,
-    setValidateErrorsMessages: setValidateErrorsMessages,
+    onFieldChangeErrorMessage: onFieldChangeErrorMessage,
     clear: clear,
     onFeatureEnterPress: onFeatureEnterPress
   };

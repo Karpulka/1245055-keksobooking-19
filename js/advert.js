@@ -81,7 +81,7 @@
       return false;
     }
 
-    var result = [];
+    var results = [];
     data.forEach(function (item) {
       var keys = Object.keys(item);
       if (item[keys[0]]) {
@@ -89,10 +89,10 @@
           value: item[keys[0]],
           template: stringTemplates[type][keys[0]]
         };
-        result.push(parameters);
+        results.push(parameters);
       }
     });
-    return result;
+    return results;
   };
 
   var render = function (advert) {
