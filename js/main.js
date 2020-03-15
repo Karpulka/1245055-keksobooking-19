@@ -30,7 +30,7 @@
     }
   };
 
-  var activatePageElements = function () {
+  var onPageElementsActivate = function () {
     activatePage();
     window.data.load(onSuccessLoad, window.util.showErrorMessage);
     window.form.onFieldChangeErrorMessage();
@@ -77,16 +77,16 @@
     window.form.clear();
     mapFilter.reset();
 
-    mainPin.addEventListener('mousedown', window.mainPin.onMouseClick.bind(null, activatePageElements), {once: true});
-    mainPin.addEventListener('keydown', window.mainPin.onEnterPress.bind(null, activatePageElements), {once: true});
+    mainPin.addEventListener('mousedown', window.mainPin.onMouseClick.bind(null, onPageElementsActivate), {once: true});
+    mainPin.addEventListener('keydown', window.mainPin.onEnterPress.bind(null, onPageElementsActivate), {once: true});
   };
 
   window.form.setAddressFieldValue(mainPin, true);
   window.form.toggleDisabled();
   window.form.toggleDisabled(mapFilterFields);
 
-  mainPin.addEventListener('mousedown', window.mainPin.onMouseClick.bind(null, activatePageElements), {once: true});
-  mainPin.addEventListener('keydown', window.mainPin.onEnterPress.bind(null, activatePageElements), {once: true});
+  mainPin.addEventListener('mousedown', window.mainPin.onMouseClick.bind(null, onPageElementsActivate), {once: true});
+  mainPin.addEventListener('keydown', window.mainPin.onEnterPress.bind(null, onPageElementsActivate), {once: true});
 
   adForm.addEventListener('submit', onFormSubmit);
 
